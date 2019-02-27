@@ -30,6 +30,13 @@ namespace RestaurantApp.Service.Controllers
             return await _context.Tables.ToListAsync();
         }
 
+        // GET: api/Tables
+        [HttpGet("avaliable")]
+        public async Task<ActionResult<IEnumerable<Table>>> GetAvaliableTables()
+        {
+            return await _context.Tables.Where(t => t.IsAvailable == true).ToListAsync();
+        }
+
         // GET: api/Tables/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Table>> GetTable(int id)

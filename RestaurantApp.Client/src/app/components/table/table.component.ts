@@ -50,17 +50,21 @@ export class TableComponent implements OnInit {
   }
 
   onDelete(table: Table): void {
-    if (confirm('Are you sure to delete ' + table.tableName + '?')) {
-      this.service.deleteTable(table).subscribe(
-        res => {
-          const index = this.tables.indexOf(table);
-          this.tables.splice(index, 1);
-        },
-        err => {
-          console.log(err);
-          alert(err);
-        }
-      );
+    if (table.isAvailable === false) {
+      alert('You cannot delete the ' + table.tableName + ' since it is using on an order.')
+    } else {
+      if (confirm('Are you sure to delete ' + table.tableName + '?')) {
+        this.service.deleteTable(table).subscribe(
+          res => {
+            const index = this.tables.indexOf(table);
+            this.tables.splice(index, 1);
+          },
+          err => {
+            console.log(err);
+            alert(err);
+          }
+        );
+      }
     }
   }
 
@@ -69,6 +73,8 @@ export class TableComponent implements OnInit {
       tableName: null,
       isAvailable: true
     });
+
+    this.submitted = false;
   }
 
 }

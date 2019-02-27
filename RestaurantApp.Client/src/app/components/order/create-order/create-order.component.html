@@ -1,0 +1,32 @@
+<div class="card bg-light rounded-0 border-0">
+  <div class="card-header text-center rounded-0">
+    {{ title }}
+  </div>
+  <div class="card-body rounded-0">
+    <form [formGroup]="form" autocomplete="off">
+      <div class="form-group">
+        <label>Order Name</label>
+        <input formControlName="orderName" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.orderName.errors }"/>
+        <div *ngIf="submitted && field.orderName.errors" class="invalid-feedback">
+          <div *ngIf="field.orderName.errors.required">The order name field is required.</div>
+          <div *ngIf="field.orderName.errors.maxlength">The order name field must be 35 characters at most.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Table</label>
+        <select
+          class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.tableID.errors }" (change)="setName($event.target)"
+          formControlName="tableID">
+          <option [value]="table.id" *ngFor="let table of tables">{{ table.tableName }}</option>
+        </select>
+        <div *ngIf="submitted && field.tableID.errors" class="invalid-feedback">
+          <div *ngIf="field.tableID.errors.required">The table field is required.</div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer text-right rounded-0">
+    <button class="btn btn-sm btn-secondary rounded-0" (click)="reset(form)">Reset</button>
+    <button class="btn btn-sm btn-primary rounded-0 ml-1" (click)="onSubmit(form)" [disabled]="!form.valid" matDialogClose>Submit</button>
+  </div>
+</div>

@@ -29,6 +29,7 @@ export class ProductComponent implements OnInit {
 
   reset(form: NgForm): void {
     form.reset();
+    this.submitted = false;
   }
 
   onSubmit(form: NgForm): void {

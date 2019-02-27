@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantApp.Service.Data;
 
 namespace RestaurantApp.Service.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190227180813_CreateOrders")]
+    partial class CreateOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,19 +199,15 @@ namespace RestaurantApp.Service.Migrations
 
                     b.Property<string>("OrderName")
                         .IsRequired()
-                        .HasMaxLength(50);
+                        .HasMaxLength(35);
 
                     b.Property<int>("TableID");
 
                     b.Property<double>("Total");
 
-                    b.Property<string>("UserID");
-
                     b.HasKey("ID");
 
                     b.HasIndex("TableID");
-
-                    b.HasIndex("UserID");
 
                     b.ToTable("Orders");
                 });
@@ -316,10 +314,6 @@ namespace RestaurantApp.Service.Migrations
                         .WithMany()
                         .HasForeignKey("TableID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RestaurantApp.Service.Model.ApplicationUser", "Waiter")
-                        .WithMany()
-                        .HasForeignKey("UserID");
                 });
 #pragma warning restore 612, 618
         }

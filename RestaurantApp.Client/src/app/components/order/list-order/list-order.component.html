@@ -1,0 +1,48 @@
+<div class="card bg-light rounded-0">
+  <div class="card-header text-center rounded-0 d-flex justify-content-between align-items-center">
+    <span>{{ title }}</span>
+    <div class="btn btn-primary btn-sm rounded-0" (click)="openRegistrationOrderDialog()">Create a New Order</div>
+  </div>
+  <div class="card-body rounded-0" *ngIf="!orderService.orders.length">
+    <div class="alert alert-primary m-0 rounded-0" role="alert">
+      There are no any resources to show here.
+    </div>
+  </div>
+  <div class="card-body rounded-0 p-0" *ngIf="orderService.orders.length">
+    <table class="table table-striped table-borderless m-0">
+      <thead>
+        <tr>
+          <th scope="col">ORDER NAME</th>
+          <th scope="col">TABLE</th>
+          <th scope="col">TOTAL</th>
+          <th scope="col">STATUS</th>
+          <th scope="col">WAITER</th>
+          <th scope="col">CREATED AT</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orderService.orders">
+          <td class="align-middle">{{ order.orderName }}</td>
+          <td class="align-middle">{{ order.table.tableName }}</td>
+          <td class="align-middle">{{ order.total | currency }}</td>
+          <td class="align-middle">
+            <div *ngIf="order.isPaid" class="badge badge-success rounded-0">Paid</div>
+            <div *ngIf="!order.isPaid" class="badge badge-warning rounded-0">Unpaid</div>
+          </td>
+          <td>{{ order.waiter.firstName }} {{ order.waiter.lastName }}</td>
+          <td class="align-middle">{{ order.createdAt | date: 'dd.MM.yyyy - HH:mm:ss' }}</td>
+          <td class="align-middle text-right">
+            <a class="mr-2" [routerLink]="['/order/' + order.id + '/details']">
+              <i class="fas fa-utensils"></i>
+            </a>
+            <i style="cursor: pointer" (click)="onDelete(order)" class="text-danger far fa-trash-alt"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer rounded-0 text-center text-secondary">
+    Total Orders: {{ orderService.orders.length }}
+  </div>
+</div>

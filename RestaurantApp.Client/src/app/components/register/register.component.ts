@@ -45,6 +45,7 @@ export class RegisterComponent implements OnInit {
 
   reset(form: NgForm): void {
     form.reset();
+    this.submitted = false;
   }
 
 }

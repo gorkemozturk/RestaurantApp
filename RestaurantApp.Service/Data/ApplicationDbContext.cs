@@ -18,5 +18,6 @@ namespace RestaurantApp.Service.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

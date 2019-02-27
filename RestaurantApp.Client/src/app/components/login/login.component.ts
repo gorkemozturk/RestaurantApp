@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
 
   reset(form: NgForm) {
     form.reset();
+    this.submitted = false;
   }
 
 }

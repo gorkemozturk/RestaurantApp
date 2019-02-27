@@ -14,6 +14,10 @@ export class TableService {
     return this.http.get<any>(this.url);
   }
 
+  getAvaliableTables() {
+    return this.http.get<any>(this.url + 'avaliable');
+  }
+
   postTable(table: Table) {
     return this.http.post<any>(this.url, table);
   }
