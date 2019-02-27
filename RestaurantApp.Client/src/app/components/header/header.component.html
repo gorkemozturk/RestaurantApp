@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isAuthanticated" [routerLink]="['/']">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isAuthanticated" [routerLink]="['/tables']">Tables</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isAuthanticated" [routerLink]="['/products']">Products</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!authService.isAuthanticated" [routerLink]="['/login']">Login</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="!authService.isAuthanticated" [routerLink]="['/register']">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isAuthanticated" [routerLink]="['/tables']">{{ authService.currentUser.given_name }}</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isAuthanticated" href="javascript:;" (click)="authService.logout()">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,25 @@
+*, html, body {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+table thead tr th {
+    font-weight: normal;
+}
+
+.btn {
+    text-transform: uppercase;
+}
+
+#toast-container > div {
+    opacity: 1;
+}
+
+.badge {
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.customized-dialog .mat-dialog-container {
+    padding: 0;
+    border-radius: 0;
+}

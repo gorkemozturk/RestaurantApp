@@ -1,0 +1,46 @@
+<div class="card bg-light rounded-0 w-50 mx-auto">
+  <div class="card-header text-center rounded-0">
+    {{ title }}
+  </div>
+  <div class="card-body rounded-0">
+    <form [formGroup]="form" autocomplete="off">
+      <div class="form-group row">
+        <div class="col">
+          <label>First Name</label>
+          <input formControlName="firstName" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.firstName.errors }"/>
+          <div *ngIf="submitted && field.firstName.errors" class="invalid-feedback">
+            <div *ngIf="field.firstName.errors.required">The firstname field is required.</div>
+            <div *ngIf="field.firstName.errors.maxlength">The firstname field must be 50 characters at most.</div>
+          </div>
+        </div>
+        <div class="col">
+          <label>Last Name</label>
+          <input formControlName="lastName" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.lastName.errors }"/>
+          <div *ngIf="submitted && field.lastName.errors" class="invalid-feedback">
+            <div *ngIf="field.lastName.errors.required">The lastname field is required.</div>
+            <div *ngIf="field.lastName.errors.maxlength">The lastname field must be 25 characters at most.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>E-Mail</label>
+        <input formControlName="email" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.email.errors }"/>
+        <div *ngIf="submitted && field.email.errors" class="invalid-feedback">
+          <div *ngIf="field.email.errors.required">The e-mail field is required.</div>
+          <div *ngIf="field.email.errors.email">The e-mail field must be e-mail format.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input formControlName="password" type="password" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.password.errors }"/>
+        <div *ngIf="submitted && field.password.errors" class="invalid-feedback">
+          <div *ngIf="field.password.errors.required">The password field is required.</div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-footer text-right rounded-0">
+    <button class="btn btn-sm btn-secondary rounded-0" (click)="reset(form)">Reset</button>
+    <button class="btn btn-sm btn-primary rounded-0 ml-1" (click)="onSubmit(form)">Register</button>
+  </div>
+</div>
