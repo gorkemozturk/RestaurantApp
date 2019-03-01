@@ -1,0 +1,69 @@
+<div class="row">
+  <div class="col">
+    <div class="card bg-light rounded-0">
+      <div class="card-header text-center rounded-0">
+        ORDER: {{ order.orderName }}
+      </div>
+      <div *ngIf="!orderProductService.orderProducts.length" class="card-body rounded-0">
+        <div class="alert alert-primary m-0 rounded-0" role="alert">
+          There are no any resources to show here.
+        </div>
+      </div>
+      <div *ngIf="orderProductService.orderProducts.length" class="card-body rounded-0 p-0">
+        <table class="table table-striped table-borderless table-hover m-0">
+          <tbody>
+            <tr style="cursor: pointer;" (click)="onDelete(product)" *ngFor="let product of orderProductService.orderProducts">
+              <td class="d-flex justify-content-between align-items-center">
+                <div>
+                  {{ product.product.productName }} x {{ product.quantity }}
+                  <div class="badge badge-primary rounded-0 ml-2" *ngIf="product.isDone && !order?.isPaid">Ready</div>
+                  <div class="badge badge-warning rounded-0 ml-2" *ngIf="!product.isDone && !order?.isPaid">Pending</div>
+                </div>
+                <div>
+                  {{ (product.product.price + (product.product.price * product.product.tax / 100)) * product.quantity | currency }}
+                  <i class="text-danger fas fa-caret-right ml-2"></i>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="d-flex justify-content-between align-items-center">
+                <strong>TOTAL</strong>
+                <strong>{{ orderService.total | currency }}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer rounded-0 text-center text-secondary">
+        TOTAL PRODUCTS IN CURRENT ORDER: {{ orderProductService.orderProducts.length }}
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card bg-light rounded-0">
+      <div class="card-header text-center rounded-0">
+        ADD A NEW PRODUCT TO THE ORDER
+      </div>
+      <div *ngIf="!products.length" class="card-body rounded-0">
+        <div class="alert alert-primary m-0 rounded-0" role="alert">
+          There are no any resources to show here.
+        </div>
+      </div>
+      <div *ngIf="products.length" class="card-body rounded-0 p-0">
+        <table class="table table-striped table-borderless table-hover m-0">
+          <tbody>
+            <tr style="cursor: pointer;" (click)="onSubmit(product)" *ngFor="let product of products">
+              <td class="d-flex justify-content-between align-items-center">
+                <span><i class="text-primary fas fa-caret-left mr-2"></i> {{ product.productName }}</span>
+                <span>{{ product.price + (product.price * product.tax / 100) | currency }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-center text-muted rounded-0">
+        TOTAL PRODUCTS: {{ products.length }}
+      </div>
+    </div>
+  </div>
+</div>

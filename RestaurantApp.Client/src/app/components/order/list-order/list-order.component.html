@@ -1,7 +1,7 @@
 <div class="card bg-light rounded-0">
   <div class="card-header text-center rounded-0 d-flex justify-content-between align-items-center">
     <span>{{ title }}</span>
-    <div class="btn btn-primary btn-sm rounded-0" (click)="openRegistrationOrderDialog()">Create a New Order</div>
+    <button class="btn btn-primary btn-sm rounded-0" (click)="openRegistrationOrderDialog()">Create a New Order</button>
   </div>
   <div class="card-body rounded-0" *ngIf="!orderService.orders.length">
     <div class="alert alert-primary m-0 rounded-0" role="alert">
@@ -34,7 +34,7 @@
           <td class="align-middle">{{ order.createdAt | date: 'dd.MM.yyyy - HH:mm:ss' }}</td>
           <td class="align-middle text-right">
             <a class="mr-2" [routerLink]="['/order/' + order.id + '/details']">
-              <i class="fas fa-utensils"></i>
+              <i class="fas fa-eye"></i>
             </a>
             <i style="cursor: pointer" (click)="onDelete(order)" class="text-danger far fa-trash-alt"></i>
           </td>
@@ -43,6 +43,6 @@
     </table>
   </div>
   <div class="card-footer rounded-0 text-center text-secondary">
-    Total Orders: {{ orderService.orders.length }}
+    TOTAL ORDERS: {{ orderService.orders.length }}
   </div>
 </div>

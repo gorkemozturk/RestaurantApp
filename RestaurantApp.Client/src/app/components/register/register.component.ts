@@ -28,9 +28,7 @@ export class RegisterComponent implements OnInit {
   onSubmit(form: NgForm): void {
     this.submitted = true;
 
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) { return; }
 
     this.service.register(form.value).subscribe(
       res => {

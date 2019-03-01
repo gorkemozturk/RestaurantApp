@@ -6,10 +6,16 @@
 
 table thead tr th {
     font-weight: normal;
+    font-size: 90%
 }
 
 .btn {
     text-transform: uppercase;
+}
+
+.form-group label {
+    text-transform: uppercase;
+    font-size: 90%
 }
 
 #toast-container > div {

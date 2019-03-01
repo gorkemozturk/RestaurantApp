@@ -22,14 +22,17 @@ import { ProductService } from './_services/product.service';
 import { OrderService } from './_services/order.service';
 import { ListOrderComponent } from './components/order/list-order/list-order.component';
 import { CreateOrderComponent } from './components/order/create-order/create-order.component';
+import { DetailsOrderComponent } from './components/order/details-order/details-order.component';
+import { OrderProductService } from './_services/order-product.service';
 
 const routes: Route[] = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, canActivate: [ AuthGuard ] },
   { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
   { path: 'tables', component: TableComponent, canActivate: [ AuthGuard ] },
   { path: 'products', component: ProductComponent, canActivate: [ AuthGuard ] },
-  { path: 'orders', component: ListOrderComponent, canActivate: [ AuthGuard ] }
+  { path: 'orders', component: ListOrderComponent, canActivate: [ AuthGuard ] },
+  { path: 'order/:id/details', component: DetailsOrderComponent, canActivate: [ AuthGuard ] }
 ]
 
 @NgModule({
@@ -43,7 +46,8 @@ const routes: Route[] = [
     TableComponent,
     ProductComponent,
     ListOrderComponent,
-    CreateOrderComponent
+    CreateOrderComponent,
+    DetailsOrderComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +62,7 @@ const routes: Route[] = [
     TableService,
     ProductService,
     OrderService,
+    OrderProductService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
@@ -65,7 +70,7 @@ const routes: Route[] = [
     }
   ],
   entryComponents: [
-    CreateOrderComponent,
+    CreateOrderComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -40,6 +42,35 @@ namespace RestaurantApp.Service.Controllers
             }
 
             return order;
+        }
+
+        [HttpGet("{id}/total")]
+        public async Task<IActionResult> GetOrderTotal([FromRoute] int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+                return BadRequest();
+
+            var orders = await _context.OrderProducts.Where(o => o.OrderID == id).Include(o => o.Product).Select(o => new
+            {
+                price = o.Product.Price,
+                tax = o.Product.Tax,
+                quantity = o.Quantity
+            }).ToListAsync();
+
+            if (orders == null)
+                return NoContent();
+
+            double total = 0;
+            foreach (var item in orders)
+                total += (item.price + (item.price * item.tax / 100)) * item.quantity;
+
+            order.Total = total;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(total);
         }
 
         // PUT: api/Orders/5

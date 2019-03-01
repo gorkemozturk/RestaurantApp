@@ -9,11 +9,16 @@ export class OrderService {
   private readonly url = 'https://localhost:44323/api/orders/';
 
   orders: Order[] = [];
+  total:number = 0;
 
   constructor(private http: HttpClient) { }
 
   getOrders() {
     return this.http.get<any>(this.url).subscribe(res => this.orders = res);
+  }
+
+  getOrder(id: any) {
+    return this.http.get<any>(this.url + id);
   }
 
   postOrder(order: Order) {
@@ -22,5 +27,9 @@ export class OrderService {
 
   deleteOrder(order: Order) {
     return this.http.delete<any>(this.url + order.id);
+  }
+
+  getTotal(id: number) {
+    return this.http.get<any>(this.url + id + '/total').subscribe(res => this.total = res);
   }
 }

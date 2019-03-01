@@ -29,9 +29,7 @@ export class TableComponent implements OnInit {
   onSubmit(form: NgForm): void {
     this.submitted = true;
 
-    if (this.form.invalid) {
-      return;
-    }
+    if (this.form.invalid) { return; }
 
     this.service.postTable(form.value).subscribe(
       res => {
