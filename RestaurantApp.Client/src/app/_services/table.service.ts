@@ -25,4 +25,8 @@ export class TableService {
   deleteTable(table: Table) {
     return this.http.delete<any>(this.url + table.id);
   }
+  
+  getTableUsage(id: number) {
+    return this.http.get<any>(this.url + id + '/usage');
+  }
 }

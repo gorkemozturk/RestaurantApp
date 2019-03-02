@@ -24,4 +24,8 @@ export class OrderProductService {
   deleteOrderProduct(product: OrderProduct) {
     return this.http.delete<any>(this.url + product.id);
   }
+
+  putOrderProduct(product: OrderProduct) {
+    return this.http.put<any>(this.url + product.id, product);
+  }
 }

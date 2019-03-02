@@ -12,6 +12,7 @@ export class TableComponent implements OnInit {
   tables: Table[] = [];
   form: FormGroup;
   submitted: boolean = false;
+  usage: boolean = false;
 
   constructor(private service: TableService, private fb: FormBuilder) { }
 
@@ -48,22 +49,27 @@ export class TableComponent implements OnInit {
   }
 
   onDelete(table: Table): void {
-    if (table.isAvailable === false) {
-      alert('You cannot delete the ' + table.tableName + ' since it is using on an order.')
-    } else {
-      if (confirm('Are you sure to delete ' + table.tableName + '?')) {
-        this.service.deleteTable(table).subscribe(
-          res => {
-            const index = this.tables.indexOf(table);
-            this.tables.splice(index, 1);
-          },
-          err => {
-            console.log(err);
-            alert(err);
+    this.service.getTableUsage(table.id).subscribe(
+      res => {
+        this.usage = res;
+        if (this.usage === true) {
+          alert('You cannot delete ' +  table.tableName + ' since it is using on an order.');
+        } else {
+          if (confirm('Are you sure to delete ' + table.tableName + '?')) {
+            this.service.deleteTable(table).subscribe(
+              res => {
+                const index = this.tables.indexOf(table);
+                this.tables.splice(index, 1);
+              },
+              err => {
+                console.log(err);
+                alert(err);
+              }
+            );
           }
-        );
+        }
       }
-    }
+    );
   }
 
   reset(form: NgForm): void {

@@ -13,7 +13,6 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class TablesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -44,11 +43,9 @@ namespace RestaurantApp.Service.Controllers
             var table = await _context.Tables.FindAsync(id);
 
             if (table == null)
-            {
                 return NotFound();
-            }
 
-            return table;
+            return Ok(table);
         }
 
         // PUT: api/Tables/5
@@ -86,9 +83,17 @@ namespace RestaurantApp.Service.Controllers
         public async Task<ActionResult<Table>> PostTable(Table table)
         {
             _context.Tables.Add(table);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTable", new { id = table.ID }, table);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return Ok(table);
         }
 
         // DELETE: api/Tables/5
@@ -102,9 +107,28 @@ namespace RestaurantApp.Service.Controllers
             }
 
             _context.Tables.Remove(table);
-            await _context.SaveChangesAsync();
 
-            return table;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return Ok(table);
+        }
+
+        [HttpGet("{id}/usage")]
+        public bool IsTableUsed([FromRoute] int id)
+        {
+            var orders = _context.Orders.Where(t => t.TableID == id).Count();
+
+            if (orders == 0)
+                return false;
+            else
+                return true;
         }
 
         private bool TableExists(int id)

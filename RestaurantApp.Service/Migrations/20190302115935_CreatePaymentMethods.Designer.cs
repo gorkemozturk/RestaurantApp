@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RestaurantApp.Service.Data;
 
 namespace RestaurantApp.Service.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190302115935_CreatePaymentMethods")]
+    partial class CreatePaymentMethods
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,29 +237,6 @@ namespace RestaurantApp.Service.Migrations
                     b.ToTable("OrderProducts");
                 });
 
-            modelBuilder.Entity("RestaurantApp.Service.Model.Payment", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
-
-                    b.Property<int>("OrderID");
-
-                    b.Property<int>("PaymentMethodID");
-
-                    b.Property<double>("Total");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("OrderID");
-
-                    b.HasIndex("PaymentMethodID");
-
-                    b.ToTable("Payments");
-                });
-
             modelBuilder.Entity("RestaurantApp.Service.Model.PaymentMethod", b =>
                 {
                     b.Property<int>("ID")
@@ -386,19 +365,6 @@ namespace RestaurantApp.Service.Migrations
                     b.HasOne("RestaurantApp.Service.Model.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("RestaurantApp.Service.Model.Payment", b =>
-                {
-                    b.HasOne("RestaurantApp.Service.Model.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("RestaurantApp.Service.Model.PaymentMethod", "PaymentMethod")
-                        .WithMany()
-                        .HasForeignKey("PaymentMethodID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

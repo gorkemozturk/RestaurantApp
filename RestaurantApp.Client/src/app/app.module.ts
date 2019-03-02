@@ -24,6 +24,9 @@ import { ListOrderComponent } from './components/order/list-order/list-order.com
 import { CreateOrderComponent } from './components/order/create-order/create-order.component';
 import { DetailsOrderComponent } from './components/order/details-order/details-order.component';
 import { OrderProductService } from './_services/order-product.service';
+import { PaymentMethodComponent } from './components/payment-method/payment-method.component';
+import { PaymentMethodService } from './_services/payment-method.service';
+import { PaymentService } from './_services/payment.service';
 
 const routes: Route[] = [
   { path: '', component: HomeComponent, canActivate: [ AuthGuard ] },
@@ -32,7 +35,8 @@ const routes: Route[] = [
   { path: 'tables', component: TableComponent, canActivate: [ AuthGuard ] },
   { path: 'products', component: ProductComponent, canActivate: [ AuthGuard ] },
   { path: 'orders', component: ListOrderComponent, canActivate: [ AuthGuard ] },
-  { path: 'order/:id/details', component: DetailsOrderComponent, canActivate: [ AuthGuard ] }
+  { path: 'order/:id/details', component: DetailsOrderComponent, canActivate: [ AuthGuard ] },
+  { path: 'payment-methods', component: PaymentMethodComponent, canActivate: [ AuthGuard ] }
 ]
 
 @NgModule({
@@ -48,6 +52,7 @@ const routes: Route[] = [
     ListOrderComponent,
     CreateOrderComponent,
     DetailsOrderComponent,
+    PaymentMethodComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +68,8 @@ const routes: Route[] = [
     ProductService,
     OrderService,
     OrderProductService,
+    PaymentMethodService,
+    PaymentService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

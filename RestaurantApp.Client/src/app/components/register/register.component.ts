@@ -32,7 +32,6 @@ export class RegisterComponent implements OnInit {
 
     this.service.register(form.value).subscribe(
       res => {
-        console.log(res);
         this.router.navigate(['/login']);
       },
       err => {

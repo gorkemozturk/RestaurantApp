@@ -47,15 +47,21 @@ namespace RestaurantApp.Service.Controllers
                 IsDone = false
             };
 
-            var product = await _context.OrderProducts.Where(o => o.OrderID == orderID).Where(o => o.ProductID == productID).FirstOrDefaultAsync();
-            var orderProducts = await _context.OrderProducts.Where(o => o.OrderID == orderID).Where(o => o.ProductID == productID).CountAsync();
+            var product = await _context.OrderProducts.Where(o => o.OrderID == orderID).Where(o => o.ProductID == productID).Where(o => o.IsDone == false).FirstOrDefaultAsync();
+            var orderProducts = await _context.OrderProducts.Where(o => o.OrderID == orderID).Where(o => o.ProductID == productID).Where(o => o.IsDone == false).CountAsync();
 
             if (orderProducts > 0)
                 product.Quantity++;
             else
                 _context.OrderProducts.Add(orderProduct);
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e){
+                return BadRequest(e.Message);
+            }
 
             return Ok(orderProduct);
         }
@@ -68,9 +74,42 @@ namespace RestaurantApp.Service.Controllers
                 return NotFound();
 
             _context.OrderProducts.Remove(orderProduct);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
             return Ok(orderProduct);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutOrderProduct([FromRoute] int id, [FromBody] OrderProduct orderProduct)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (id != orderProduct.ID)
+                return BadRequest();
+
+            var existingOrderProduct = await _context.OrderProducts.FindAsync(id);
+
+            existingOrderProduct.IsDone = !existingOrderProduct.IsDone;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            return NoContent();
         }
     }
 }

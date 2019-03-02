@@ -1,5 +1,14 @@
 <div class="row">
   <div class="col">
+    <button class="btn btn-secondary btn-sm rounded-0 mb-2" [routerLink]="['/orders']">
+      <i class="fas fa-chevron-left"></i>
+      Back to the Orders
+    </button>
+  </div>
+  
+  <div class="w-100"></div>
+
+  <div class="col">
     <div class="card bg-light rounded-0">
       <div class="card-header text-center rounded-0">
         ORDER: {{ order.orderName }}
@@ -12,23 +21,24 @@
       <div *ngIf="orderProductService.orderProducts.length" class="card-body rounded-0 p-0">
         <table class="table table-striped table-borderless table-hover m-0">
           <tbody>
-            <tr style="cursor: pointer;" (click)="onDelete(product)" *ngFor="let product of orderProductService.orderProducts">
+            <tr [ngClass]="setClass(product)" *ngFor="let product of orderProductService.orderProducts; let i = index">
               <td class="d-flex justify-content-between align-items-center">
                 <div>
+                  {{ i+1 }}.
                   {{ product.product.productName }} x {{ product.quantity }}
-                  <div class="badge badge-primary rounded-0 ml-2" *ngIf="product.isDone && !order?.isPaid">Ready</div>
-                  <div class="badge badge-warning rounded-0 ml-2" *ngIf="!product.isDone && !order?.isPaid">Pending</div>
+                  <div class="badge badge-primary rounded-0 ml-2" *ngIf="product.isDone && !order.isPaid">Ready</div>
                 </div>
                 <div>
                   {{ (product.product.price + (product.product.price * product.product.tax / 100)) * product.quantity | currency }}
-                  <i class="text-danger fas fa-caret-right ml-2"></i>
+                  <i (click)="confirmProduct(product)" *ngIf="!product.isDone" style="cursor: pointer;" class="text-success fas fa-check-square ml-2"></i>
+                  <i (click)="onDelete(product)" *ngIf="!product.isDone" style="cursor: pointer;" class="text-danger fas fa-caret-square-right ml-2"></i>
                 </div>
               </td>
             </tr>
             <tr>
               <td class="d-flex justify-content-between align-items-center">
                 <strong>TOTAL</strong>
-                <strong>{{ orderService.total | currency }}</strong>
+                <strong>{{ total | currency }}</strong>
               </td>
             </tr>
           </tbody>
@@ -38,9 +48,44 @@
         TOTAL PRODUCTS IN CURRENT ORDER: {{ orderProductService.orderProducts.length }}
       </div>
     </div>
+
+    <div class="clearfix"></div>
+
+    <button [disabled]="total == 0" class="btn btn-secondary btn-sm rounded-0 mt-2 float-right">
+      <i class="fas fa-print"></i>
+      PRINT
+    </button>
+
   </div>
+
   <div class="col">
-    <div class="card bg-light rounded-0">
+    <div *ngIf="order.isPaid" class="alert alert-success rounded-0 mb-2" role="alert">
+      <i class="fas fa-check"></i>
+      This order has been paid on {{ payment.createdAt | date }} for <strong>{{ payment.total | currency }}</strong> as {{ payment.paymentMethod?.name }}.
+    </div>
+
+    <form *ngIf="!order.isPaid" [formGroup]="form" autocomplete="off">
+      <div class="form-group row">
+        <div class="col">
+          <select formControlName="paymentMethodID" class="form-control form-control-sm rounded-0" [ngClass]="{ 'is-invalid': submitted && field.paymentMethodID.errors }">
+            <option [value]="method.id" *ngFor="let method of methods">{{ method.name }}</option>
+          </select>
+          <div *ngIf="submitted && field.paymentMethodID.errors" class="invalid-feedback">
+            <div *ngIf="field.paymentMethodID.errors.required">The payment metod field is required.</div>
+          </div>
+        </div>
+        <div class="col">
+          <button (click)="completeOrder(total, form)" class="btn btn-primary btn-block btn-sm rounded-0">
+            <i class="fas fa-check"></i>
+            Complete the Order ({{ total | currency }})
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <hr *ngIf="!order.isPaid">
+
+    <div *ngIf="!order.isPaid" class="card bg-light rounded-0">
       <div class="card-header text-center rounded-0">
         ADD A NEW PRODUCT TO THE ORDER
       </div>
@@ -54,7 +99,7 @@
           <tbody>
             <tr style="cursor: pointer;" (click)="onSubmit(product)" *ngFor="let product of products">
               <td class="d-flex justify-content-between align-items-center">
-                <span><i class="text-primary fas fa-caret-left mr-2"></i> {{ product.productName }}</span>
+                <span><i class="text-primary fas fa-caret-square-left mr-2"></i> {{ product.productName }}</span>
                 <span>{{ product.price + (product.price * product.tax / 100) | currency }}</span>
               </td>
             </tr>
