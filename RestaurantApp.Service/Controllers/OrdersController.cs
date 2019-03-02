@@ -133,10 +133,10 @@ namespace RestaurantApp.Service.Controllers
         }
 
         [HttpGet("{id}/ready")]
-        public bool IsOderReady(int id)
+        public async Task<bool> IsOderReady([FromRoute] int id)
         {
-            var readyProducts = _context.OrderProducts.Where(o => o.OrderID == id).Where(o => o.IsDone == true).Count();
-            var products = _context.OrderProducts.Where(o => o.OrderID == id).Count();
+            var readyProducts = await _context.OrderProducts.Where(p => p.OrderID == id).Where(p => p.IsDone == true).CountAsync();
+            var products = await _context.OrderProducts.Where(p => p.OrderID == id).CountAsync();
 
             if (readyProducts == products)
                 return true;

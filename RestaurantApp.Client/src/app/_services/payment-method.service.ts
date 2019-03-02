@@ -21,4 +21,8 @@ export class PaymentMethodService {
   deletePaymentMethod(method: PaymentMethod) {
     return this.http.delete<any>(this.url + method.id);
   }
+
+  getPaymentMethodUsage(id: number) {
+    return this.http.get<any>(this.url + id + '/usage');
+  }
 }

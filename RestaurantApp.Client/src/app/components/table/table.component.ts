@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Table } from 'src/app/_models/table';
 import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { TableService } from 'src/app/_services/table.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-table',
@@ -14,7 +15,7 @@ export class TableComponent implements OnInit {
   submitted: boolean = false;
   usage: boolean = false;
 
-  constructor(private service: TableService, private fb: FormBuilder) { }
+  constructor(private service: TableService, private fb: FormBuilder, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.service.getTables().subscribe(res => this.tables = res);
@@ -35,11 +36,9 @@ export class TableComponent implements OnInit {
     this.service.postTable(form.value).subscribe(
       res => {
         this.tables.push(res);
-        form.setValue({
-          tableName: null,
-          isAvailable: true
-        });
+        this.reset(form);
         this.submitted = false;
+        this.toastr.success('You have been inserted the table successfully.', 'Successfully');
       },
       err => {
         console.log(err);
@@ -53,13 +52,14 @@ export class TableComponent implements OnInit {
       res => {
         this.usage = res;
         if (this.usage === true) {
-          alert('You cannot delete ' +  table.tableName + ' since it is using on an order.');
+          this.toastr.error('You cannot delete ' +  table.tableName + ' since it is using on an order.', 'Error');
         } else {
           if (confirm('Are you sure to delete ' + table.tableName + '?')) {
             this.service.deleteTable(table).subscribe(
               res => {
                 const index = this.tables.indexOf(table);
                 this.tables.splice(index, 1);
+                this.toastr.warning('You have been deleted ' + table.tableName + ' successfully.', 'Successfully');
               },
               err => {
                 console.log(err);

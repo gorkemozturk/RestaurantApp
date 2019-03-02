@@ -13,6 +13,7 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TablesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -121,9 +122,9 @@ namespace RestaurantApp.Service.Controllers
         }
 
         [HttpGet("{id}/usage")]
-        public bool IsTableUsed([FromRoute] int id)
+        public async Task<bool> IsTableUsed([FromRoute] int id)
         {
-            var orders = _context.Orders.Where(t => t.TableID == id).Count();
+            var orders = await _context.Orders.Where(t => t.TableID == id).CountAsync();
 
             if (orders == 0)
                 return false;

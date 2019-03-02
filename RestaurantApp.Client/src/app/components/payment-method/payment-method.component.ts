@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PaymentMethod } from 'src/app/_models/payment-method';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { PaymentMethodService } from 'src/app/_services/payment-method.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-payment-method',
@@ -12,8 +13,9 @@ export class PaymentMethodComponent implements OnInit {
   form: FormGroup;
   submitted: boolean = false;
   methods: PaymentMethod[] = [];
+  usage: boolean = false;
   
-  constructor(private service: PaymentMethodService, private fb: FormBuilder) { }
+  constructor(private service: PaymentMethodService, private fb: FormBuilder, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.service.getPaymentMethods().subscribe(res => this.methods = res);
@@ -34,6 +36,7 @@ export class PaymentMethodComponent implements OnInit {
       (res: PaymentMethod) => {
         this.methods.push(res);
         this.reset(form);
+        this.toastr.success('You have been inserted the product successfully.', 'Successfully');
       },
       err => {
         console.log(err);
@@ -43,18 +46,28 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   onDelete(method: PaymentMethod): void {
-    if (confirm('Are you sure to delete ' + method.name + '?')) {
-      this.service.deletePaymentMethod(method).subscribe(
-        res => {
-          const index = this.methods.indexOf(method);
-          this.methods.splice(index, 1);
-        },
-        err => {
-          console.log(err);
-          alert(err);
+    this.service.getPaymentMethodUsage(method.id).subscribe(
+      res => {
+        this.usage = res;
+        if (this.usage === true) {
+          this.toastr.error('You cannot delete ' +  method.name + ' since it is using on a payment.', 'Error');
+        } else {
+          if (confirm('Are you sure to delete ' + method.name + '?')) {
+            this.service.deletePaymentMethod(method).subscribe(
+              res => {
+                const index = this.methods.indexOf(method);
+                this.methods.splice(index, 1);
+                this.toastr.warning('You have been deleted ' + method.name + ' successfully.', 'Successfully');
+              },
+              err => {
+                console.log(err);
+                alert(err);
+              }
+            );
+          }
         }
-      );
-    }
+      }
+    );
   }
 
   reset(form: NgForm) {

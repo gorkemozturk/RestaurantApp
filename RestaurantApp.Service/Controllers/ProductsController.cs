@@ -13,7 +13,6 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -111,6 +110,17 @@ namespace RestaurantApp.Service.Controllers
             }
 
             return Ok(product);
+        }
+
+        [HttpGet("{id}/usage")]
+        public async Task<bool> IsProductUsed([FromRoute] int id)
+        {
+            var orderProducts = await _context.OrderProducts.Where(p => p.ProductID == id).CountAsync();
+
+            if (orderProducts == 0)
+                return false;
+            else
+                return true;
         }
 
         private bool ProductExists(int id)

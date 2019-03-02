@@ -6,6 +6,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { ToastrModule } from 'ngx-toastr';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
@@ -60,7 +62,8 @@ const routes: Route[] = [
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     AuthService,

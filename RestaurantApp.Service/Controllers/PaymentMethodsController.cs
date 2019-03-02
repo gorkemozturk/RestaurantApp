@@ -107,6 +107,17 @@ namespace RestaurantApp.Service.Controllers
             return Ok(paymentMethod);
         }
 
+        [HttpGet("{id}/usage")]
+        public async Task<bool> IsProductMethodUsed([FromRoute] int id)
+        {
+            var payments = await _context.Payments.Where(p => p.PaymentMethodID == id).CountAsync();
+
+            if (payments == 0)
+                return false;
+            else
+                return true;
+        }
+
         private bool PaymentMethodExists(int id)
         {
             return _context.PaymentMethods.Any(e => e.ID == id);

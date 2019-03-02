@@ -9,6 +9,7 @@ import { OrderProduct } from 'src/app/_models/order-product';
 import { PaymentService } from 'src/app/_services/payment.service';
 import { PaymentMethodService } from 'src/app/_services/payment-method.service';
 import { PaymentMethod } from 'src/app/_models/payment-method';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-details-order',
@@ -25,7 +26,16 @@ export class DetailsOrderComponent implements OnInit {
   total: number = 0;
   submitted: boolean = false;
 
-  constructor(private methodService: PaymentMethodService, private paymentService: PaymentService, private orderService: OrderService, private orderProductService: OrderProductService, private productService: ProductService, private fb: FormBuilder, private route: ActivatedRoute) { }
+  constructor(
+    private methodService: PaymentMethodService, 
+    private paymentService: PaymentService, 
+    private orderService: OrderService, 
+    private orderProductService: OrderProductService, 
+    private productService: ProductService, 
+    private fb: FormBuilder, 
+    private route: ActivatedRoute,
+    private toastr: ToastrService
+  ) { }
 
   ngOnInit() {
     this.orderID = this.route.snapshot.paramMap.get('id');
@@ -106,7 +116,7 @@ export class DetailsOrderComponent implements OnInit {
       );
     }
     else {
-      alert('Product(s) that belongs to ' + this.order.orderName + ' have to get ready to complete order.');
+      this.toastr.error('Product(s) that belongs to ' + this.order.orderName + ' have to get ready to complete order.', 'Error');
     }
   }
 
