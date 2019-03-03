@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col">
-    <div class="card bg-light rounded-0">
-      <div class="card-header text-center rounded-0">
-        {{ title }}
+    <div class="card rounded-5">
+      <div class="card-header text-center rounded-5">
+        <span>{{ title }}</span>
       </div>
       <div class="card-body rounded-0" *ngIf="!products.length">
         <div class="alert alert-primary m-0 rounded-0" role="alert">
@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="card-body rounded-0 p-0" *ngIf="products.length">
-        <table class="table table-striped table-borderless m-0">
+        <table class="table table-borderless m-0">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -35,21 +35,21 @@
           </tbody>
         </table>
       </div>
-      <div class="card-footer rounded-0 text-center text-secondary">
+      <div class="card-footer rounded-5 text-center text-secondary">
         TOTAL PRODUCTS: {{ products.length }}
       </div>
     </div>
   </div>
   <div class="col">
-    <div class="card bg-light rounded-0">
-      <div class="card-header text-center rounded-0">
-        CREATE A NEW PRODUCT
+    <div class="card rounded-5">
+      <div class="card-header text-center rounded-5">
+        <span>CREATE A NEW PRODUCT</span>
       </div>
       <div class="card-body rounded-0">
         <form [formGroup]="form" autocomplete="off">
           <div class="form-group">
             <label>Product Name</label>
-            <input formControlName="productName" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.productName.errors }"/>
+            <input formControlName="productName" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.productName.errors }"/>
             <div *ngIf="submitted && field.productName.errors" class="invalid-feedback">
               <div *ngIf="field.productName.errors.required">The product name field is required.</div>
               <div *ngIf="field.productName.errors.maxlength">The product name field must be 35 characters at most.</div>
@@ -58,7 +58,7 @@
           <div class="form-group row">
             <div class="col">
               <label>Price</label>
-              <input formControlName="price" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.price.errors }"/>
+              <input formControlName="price" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.price.errors }"/>
               <div *ngIf="submitted && field.price.errors" class="invalid-feedback">
                 <div *ngIf="field.price.errors.required">The price field is required.</div>
                 <div *ngIf="field.price.errors.pattern">The price field must be numeric and 9 digits at most.</div>
@@ -66,7 +66,7 @@
             </div>
             <div class="col">
               <label>Tax</label>
-              <input formControlName="tax" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.tax.errors }"/>
+              <input formControlName="tax" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.tax.errors }"/>
               <div *ngIf="submitted && field.tax.errors" class="invalid-feedback">
                 <div *ngIf="field.tax.errors.required">The tax field is required.</div>
                 <div *ngIf="field.tax.errors.pattern">The tax field must be numeric and 9 digits at most.</div>
@@ -75,9 +75,9 @@
           </div>
         </form>
       </div>
-      <div class="card-footer rounded-0 text-right text-secondary">
-        <button class="btn btn-secondary btn-sm rounded-0 mr-2" (click)="reset(form)">Reset</button>
-        <button class="btn btn-primary btn-sm rounded-0" (click)="onSubmit(form)">Submit</button>
+      <div class="card-footer rounded-5 text-right text-secondary">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill mr-2 px-5" (click)="reset(form)">Reset</button>
+        <button class="btn btn-primary btn-sm rounded-pill px-5" (click)="onSubmit(form)">Submit</button>
       </div>
     </div>
   </div>

@@ -29,6 +29,7 @@ import { OrderProductService } from './_services/order-product.service';
 import { PaymentMethodComponent } from './components/payment-method/payment-method.component';
 import { PaymentMethodService } from './_services/payment-method.service';
 import { PaymentService } from './_services/payment.service';
+import { StatisticsService } from './_services/statistics.service';
 
 const routes: Route[] = [
   { path: '', component: HomeComponent, canActivate: [ AuthGuard ] },
@@ -73,6 +74,7 @@ const routes: Route[] = [
     OrderProductService,
     PaymentMethodService,
     PaymentService,
+    StatisticsService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
