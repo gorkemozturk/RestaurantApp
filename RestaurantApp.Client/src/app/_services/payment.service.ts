@@ -18,8 +18,8 @@ export class PaymentService {
     return this.http.get<any>(this.url + id);
   }
 
-  postPayment(total: number, payment: Payment) {
-    return this.http.post<any>(this.url + total, payment);
+  postPayment(payment: Payment) {
+    return this.http.post<any>(this.url, payment);
   }
 
   deletePayment(payment: Payment) {

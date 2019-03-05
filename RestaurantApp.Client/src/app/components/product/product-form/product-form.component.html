@@ -1,0 +1,44 @@
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white p-0">
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/products">Products</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+
+<a routerLink="/products" class="btn btn-outline-secondary btn-sm mb-3">
+  <i class="fas fa-chevron-left"></i> Back to List
+</a>
+
+<form [formGroup]="form" autocomplete="off">
+  <div class="form-group">
+    <label>Product Name</label>
+    <input formControlName="productName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.productName.errors }"/>
+    <div *ngIf="submitted && field.productName.errors" class="invalid-feedback">
+      <div *ngIf="field.productName.errors.required">The product name field is required.</div>
+      <div *ngIf="field.productName.errors.maxlength">The product name field must be 35 characters at most.</div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col">
+      <label>Price</label>
+      <input formControlName="price" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.price.errors }"/>
+      <div *ngIf="submitted && field.price.errors" class="invalid-feedback">
+        <div *ngIf="field.price.errors.required">The price field is required.</div>
+        <div *ngIf="field.price.errors.pattern">The price field must be numeric and 9 digits at most.</div>
+      </div>
+    </div>
+    <div class="col">
+      <label>Tax</label>
+      <input formControlName="tax" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.tax.errors }"/>
+      <div *ngIf="submitted && field.tax.errors" class="invalid-feedback">
+        <div *ngIf="field.tax.errors.required">The tax field is required.</div>
+        <div *ngIf="field.tax.errors.pattern">The tax field must be numeric and 9 digits at most.</div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-info btn-sm px-5 float-right" (click)="onSubmit(form)">Submit</button>
+  <button class="btn btn-secondary btn-sm px-5 float-right mr-2" (click)="reset(form)">Reset</button>
+</form>

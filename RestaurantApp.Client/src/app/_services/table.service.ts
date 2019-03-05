@@ -18,8 +18,16 @@ export class TableService {
     return this.http.get<any>(this.url + 'avaliable');
   }
 
+  getTable(id: any) {
+    return this.http.get<any>(this.url + id);
+  }
+
   postTable(table: Table) {
     return this.http.post<any>(this.url, table);
+  }
+
+  putTable(id: number, table: Table) {
+    return this.http.put<any>(this.url + id, table);
   }
 
   deleteTable(table: Table) {

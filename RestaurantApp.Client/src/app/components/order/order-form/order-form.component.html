@@ -1,0 +1,39 @@
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white p-0">
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/orders">Orders</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+
+<a routerLink="/orders" class="btn btn-outline-secondary btn-sm mb-3">
+  <i class="fas fa-chevron-left"></i> Back to List
+</a>
+
+<form [formGroup]="form" autocomplete="off">
+  <div class="form-group row">
+    <div class="col">
+      <label>Order Name</label>
+      <input formControlName="orderName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.orderName.errors }"/>
+      <div *ngIf="submitted && field.orderName.errors" class="invalid-feedback">
+        <div *ngIf="field.orderName.errors.required">The order name field is required.</div>
+        <div *ngIf="field.orderName.errors.maxlength">The order name field must be 35 characters at most.</div>
+      </div>
+    </div>
+    <div class="col">
+      <label>Table</label>
+      <select
+        class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.tableID.errors }" (change)="setName($event.target)"
+        formControlName="tableID">
+        <option [value]="table.id" *ngFor="let table of tables">{{ table.tableName }}</option>
+      </select>
+      <div *ngIf="submitted && field.tableID.errors" class="invalid-feedback">
+        <div *ngIf="field.tableID.errors.required">The table field is required.</div>
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-info btn-sm px-5 float-right" (click)="onSubmit(form)">Submit</button>
+  <button class="btn btn-secondary btn-sm px-5 float-right mr-2" (click)="reset(form)">Reset</button>
+</form>

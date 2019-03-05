@@ -14,6 +14,14 @@ export class ProductService {
     return this.http.get<any>(this.url);
   }
 
+  getProduct(id: any) {
+    return this.http.get<any>(this.url + id);
+  }
+
+  putProduct(id: any, product: Product) {
+    return this.http.put<any>(this.url + id, product);
+  }
+
   postProduct(product: Product) {
     return this.http.post<any>(this.url, product);
   }

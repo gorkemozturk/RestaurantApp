@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PaymentMethodsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -35,9 +37,11 @@ namespace RestaurantApp.Service.Controllers
             var paymentMethod = await _context.PaymentMethods.FindAsync(id);
 
             if (paymentMethod == null)
+            {
                 return NotFound();
+            }
 
-            return Ok(paymentMethod);
+            return paymentMethod;
         }
 
         // PUT: api/PaymentMethods/5
@@ -45,7 +49,9 @@ namespace RestaurantApp.Service.Controllers
         public async Task<IActionResult> PutPaymentMethod(int id, PaymentMethod paymentMethod)
         {
             if (id != paymentMethod.ID)
+            {
                 return BadRequest();
+            }
 
             _context.Entry(paymentMethod).State = EntityState.Modified;
 
@@ -56,9 +62,13 @@ namespace RestaurantApp.Service.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!PaymentMethodExists(id))
+                {
                     return NotFound();
+                }
                 else
+                {
                     throw;
+                }
             }
 
             return NoContent();
@@ -68,21 +78,10 @@ namespace RestaurantApp.Service.Controllers
         [HttpPost]
         public async Task<ActionResult<PaymentMethod>> PostPaymentMethod(PaymentMethod paymentMethod)
         {
-            if (!ModelState.IsValid)
-                return BadRequest();
-
             _context.PaymentMethods.Add(paymentMethod);
-            
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            await _context.SaveChangesAsync();
 
-            return Ok(paymentMethod);
+            return CreatedAtAction("GetPaymentMethod", new { id = paymentMethod.ID }, paymentMethod);
         }
 
         // DELETE: api/PaymentMethods/5
@@ -91,20 +90,14 @@ namespace RestaurantApp.Service.Controllers
         {
             var paymentMethod = await _context.PaymentMethods.FindAsync(id);
             if (paymentMethod == null)
+            {
                 return NotFound();
+            }
 
             _context.PaymentMethods.Remove(paymentMethod);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-            return Ok(paymentMethod);
+            return paymentMethod;
         }
 
         [HttpGet("{id}/usage")]

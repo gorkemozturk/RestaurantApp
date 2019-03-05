@@ -14,8 +14,16 @@ export class PaymentMethodService {
     return this.http.get<any>(this.url);
   }
 
+  getPaymentMethod(id: any) {
+    return this.http.get<any>(this.url + id);
+  }
+
   postPaymentMethod(method: PaymentMethod) {
     return this.http.post<any>(this.url, method);
+  }
+
+  putPaymentMethod(id: any, method: PaymentMethod) {
+    return this.http.put<any>(this.url + id, method);
   }
 
   deletePaymentMethod(method: PaymentMethod) {

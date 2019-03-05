@@ -8,12 +8,10 @@ import { Order } from '../_models/order';
 export class OrderService {
   private readonly url = 'https://localhost:44323/api/orders/';
 
-  orders: Order[] = [];
-
   constructor(private http: HttpClient) { }
 
   getOrders() {
-    return this.http.get<any>(this.url).subscribe(res => this.orders = res);
+    return this.http.get<any>(this.url);
   }
 
   getOrder(id: any) {
@@ -33,6 +31,6 @@ export class OrderService {
   }
 
   getOrderStatus(id: number) {
-    return this.http.get<any>(this.url + id + '/ready');
+    return this.http.get<any>(this.url + id + '/status');
   }
 }

@@ -12,11 +12,11 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrdersController : ControllerBase
+    public class Orders1Controller : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public OrdersController(ApplicationDbContext context)
+        public Orders1Controller(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -37,19 +37,14 @@ namespace RestaurantApp.Service.Controllers
             if (order == null)
                 return BadRequest();
 
-            var orders = await _context.OrderProducts.Where(o => o.OrderID == id).Include(o => o.Product).Select(o => new
-            {
-                price = o.Product.Price,
-                tax = o.Product.Tax,
-                quantity = o.Quantity
-            }).ToListAsync();
+            var orders = await _context.OrderProducts.Where(o => o.OrderID == id).Include(o => o.Product).ToListAsync();
 
             if (orders == null)
                 return NotFound();
 
             double total = 0;
             foreach (var item in orders)
-                total += (item.price + (item.price * item.tax / 100)) * item.quantity;
+                total += (item.Product.Price + (item.Product.Price * item.Product.Price / 100)) * item.Product.Price;
 
             order.Total = total;
 
@@ -154,8 +149,8 @@ namespace RestaurantApp.Service.Controllers
             return order;
         }
 
-        // PUT: api/Orders/5/status
-        [HttpGet("{id}/status")]
+        // PUT: api/Orders/5/ready
+        [HttpGet("{id}/ready")]
         public async Task<bool> IsOderReady([FromRoute] int id)
         {
             var readyProducts = await _context.OrderProducts.Where(p => p.OrderID == id).Where(p => p.IsDone == true).CountAsync();

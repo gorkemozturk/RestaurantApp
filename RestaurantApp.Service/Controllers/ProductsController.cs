@@ -13,6 +13,7 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -36,9 +37,11 @@ namespace RestaurantApp.Service.Controllers
             var product = await _context.Products.FindAsync(id);
 
             if (product == null)
+            {
                 return NotFound();
+            }
 
-            return Ok(product);
+            return product;
         }
 
         // PUT: api/Products/5
@@ -46,7 +49,14 @@ namespace RestaurantApp.Service.Controllers
         public async Task<IActionResult> PutProduct(int id, Product product)
         {
             if (id != product.ID)
+            {
                 return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(product);
+            }
 
             _context.Entry(product).State = EntityState.Modified;
 
@@ -74,20 +84,14 @@ namespace RestaurantApp.Service.Controllers
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+            {
+                return BadRequest(product);
+            }
 
             _context.Products.Add(product);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-            return Ok(product);
+            return CreatedAtAction("GetProduct", new { id = product.ID }, product);
         }
 
         // DELETE: api/Products/5
@@ -96,20 +100,14 @@ namespace RestaurantApp.Service.Controllers
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null)
+            {
                 return NotFound();
+            }
 
             _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-            return Ok(product);
+            return product;
         }
 
         [HttpGet("{id}/usage")]

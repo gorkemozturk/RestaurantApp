@@ -30,7 +30,7 @@ namespace RestaurantApp.Service.Controllers
             return await _context.Tables.ToListAsync();
         }
 
-        // GET: api/Tables
+        // GET: api/Tables/avaliable
         [HttpGet("avaliable")]
         public async Task<ActionResult<IEnumerable<Table>>> GetAvaliableTables()
         {
@@ -44,9 +44,11 @@ namespace RestaurantApp.Service.Controllers
             var table = await _context.Tables.FindAsync(id);
 
             if (table == null)
+            {
                 return NotFound();
+            }
 
-            return Ok(table);
+            return table;
         }
 
         // PUT: api/Tables/5
@@ -56,6 +58,11 @@ namespace RestaurantApp.Service.Controllers
             if (id != table.ID)
             {
                 return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(table);
             }
 
             _context.Entry(table).State = EntityState.Modified;
@@ -83,18 +90,15 @@ namespace RestaurantApp.Service.Controllers
         [HttpPost]
         public async Task<ActionResult<Table>> PostTable(Table table)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(table);
+            }
+
             _context.Tables.Add(table);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-            return Ok(table);
+            return CreatedAtAction("GetTable", new { id = table.ID }, table);
         }
 
         // DELETE: api/Tables/5
@@ -108,17 +112,9 @@ namespace RestaurantApp.Service.Controllers
             }
 
             _context.Tables.Remove(table);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-            return Ok(table);
+            return table;
         }
 
         [HttpGet("{id}/usage")]

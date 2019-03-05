@@ -1,0 +1,44 @@
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white p-0">
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+
+<a routerLink="/payment-method/new" class="btn btn-sm btn-info float-right mb-3 px-5">Create a New Payment Method</a>
+
+<div class="clearfix"></div>
+
+<div class="card border-info rounded-0">
+  <div class="card-body rounded-0" *ngIf="!methods.length">
+    <div class="alert alert-primary m-0 rounded-0" role="alert">
+      There are no any resources to show here.
+    </div>
+  </div>
+  <div class="card-body p-0" *ngIf="methods.length">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th class="border-0" scope="col">#</th>
+          <th class="border-0" scope="col">PAYMENT METHOD NAME</th>
+          <th class="border-0"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let method of methods; let i = index">
+          <td class="align-middle">{{ i+1}}</td>
+          <td class="align-middle">{{ method.name }}</td>
+          <td class="text-right">
+            <a style="cursor: pointer; text-decoration: none !important" [routerLink]="['/payment-method/' + method.id + '/edit']" class="text-info far fa-edit mr-2"></a>
+            <i style="cursor: pointer" (click)="onDelete(method)" class="text-danger far fa-times-circle"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer text-center text-muted rounded-0">
+    <small>TOTAL PAYMENT METHODS: {{ methods.length }}</small>
+  </div>
+</div>

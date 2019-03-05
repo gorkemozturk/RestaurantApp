@@ -1,0 +1,58 @@
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white p-0">
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+
+<a routerLink="/order/new" class="btn btn-sm btn-info float-right mb-3 px-5">Create a New Order</a>
+
+<div class="clearfix"></div>
+
+<div class="card border-info rounded-0">
+  <div class="card-body rounded-0" *ngIf="!orders.length">
+    <div class="alert alert-primary m-0 rounded-0" role="alert">
+      There are no any resources to show here.
+    </div>
+  </div>
+  <div class="card-body p-0" *ngIf="orders.length">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th class="border-0" scope="col">#</th>
+          <th class="border-0" scope="col">ORDER NAME</th>
+          <th class="border-0" scope="col">TABLE</th>
+          <th class="border-0" scope="col">TOTAL</th>
+          <th class="border-0 text-center" scope="col">STATUS</th>
+          <th class="border-0" scope="col">WAITER</th>
+          <th class="border-0"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders; let i = index">
+          <td>{{ i+1 }}</td>
+          <td class="align-middle"><a class="text-info" [routerLink]="['/order/' + order.id + '/view']">{{ order.orderName | summary }}</a></td>
+          <td class="align-middle">{{ order.table.tableName }}</td>
+          <td class="align-middle">{{ order.total | currency }}</td>
+          <td class="align-middle text-center">
+            <i *ngIf="!order.isPaid" class="text-warning fas fa-exclamation-circle mr-1"></i>
+            <small *ngIf="!order.isPaid" class="text-warning font-weight-bold">UNPAID</small>
+
+            <i *ngIf="order.isPaid" class="text-success fas fa-check-circle mr-1"></i>
+            <small *ngIf="order.isPaid" class="text-success font-weight-bold">PAID</small>
+          </td>
+          <td>{{ order.waiter.firstName }} {{ order.waiter.lastName }}</td>
+          <td class="text-right">
+            <a style="cursor: pointer; text-decoration: none !important" [routerLink]="['/order/' + order.id + '/view']" class="text-info fas fa-info-circle"></a>
+            <i *ngIf="!order.isPaid" style="cursor: pointer" (click)="onDelete(order)" class="text-danger far fa-times-circle ml-2"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer text-center text-muted rounded-0">
+    <small>TOTAL ORDERS: {{ orders.length }}</small>
+  </div>
+</div>

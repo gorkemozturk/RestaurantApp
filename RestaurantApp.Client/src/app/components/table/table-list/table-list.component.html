@@ -1,0 +1,52 @@
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white p-0">
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Tables</li>
+  </ol>
+</nav>
+
+<a routerLink="/table/new" class="btn btn-sm btn-info float-right mb-3 px-5">Create a New Table</a>
+
+<div class="clearfix"></div>
+
+<div class="card border-info rounded-0">
+  <div class="card-body rounded-0" *ngIf="!tables.length">
+    <div class="alert alert-primary m-0 rounded-0" role="alert">
+      There are no any resources to show here.
+    </div>
+  </div>
+  <div class="card-body p-0" *ngIf="tables.length">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th class="border-0" scope="col">#</th>
+          <th class="border-0" scope="col">TABLE NAME</th>
+          <th scope="col" class="border-0 text-center">STATUS</th>
+          <th class="border-0"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let table of tables; let i = index">
+          <td>{{ i+1 }}</td>
+          <td class="align-middle">{{ table.tableName }}</td>
+          <td class="align-middle text-center">
+            <i *ngIf="table.isAvailable" class="text-success fas fa-check-circle mr-1"></i>
+            <small *ngIf="table.isAvailable" class="font-weight-bold text-success">AVALIABLE</small>
+
+            <i *ngIf="!table.isAvailable" class="text-warning fas fa-exclamation-circle mr-1"></i>
+            <small *ngIf="!table.isAvailable" class="text-warning font-weight-bold">UNAVALIABLE</small>
+          </td>
+          <td class="text-right">
+            <a style="cursor: pointer; text-decoration: none !important" [routerLink]="['/table/' + table.id + '/edit']" class="text-info far fa-edit mr-2"></a>
+            <i style="cursor: pointer" (click)="onDelete(table)" class="text-danger far fa-times-circle"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card-footer text-center text-muted rounded-0">
+    <small>TOTAL TABLES: {{ tables.length }}</small>
+  </div>
+</div>

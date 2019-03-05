@@ -1,29 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { Table } from 'src/app/_models/table';
+import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { OrderService } from 'src/app/_services/order.service';
-import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Table } from 'src/app/_models/table';
 import { TableService } from 'src/app/_services/table.service';
 
 @Component({
-  selector: 'app-create-order',
-  templateUrl: './create-order.component.html'
+  selector: 'app-order-form',
+  templateUrl: './order-form.component.html'
 })
-export class CreateOrderComponent implements OnInit {
-  title: string = 'CREATE A NEW ORDER';
-  tables: Table[];
+export class OrderFormComponent implements OnInit {
+  title: string = 'Create a New Order';
   form: FormGroup;
   submitted: boolean = false;
+  tables: Table[] = [];
   
-  constructor(private orderService: OrderService, private fb: FormBuilder, private tableService: TableService) { }
+  constructor(
+    private orderService: OrderService, 
+    private tableService: TableService, 
+    private fb: FormBuilder, 
+    private router: Router) { }
 
   ngOnInit() {
     this.tableService.getAvaliableTables().subscribe(res => this.tables = res);
-    
+
     this.form = this.fb.group({
       orderName: [null, [Validators.required, Validators.maxLength(50)]],
       tableID: [null, Validators.required]
     });
-    
   }
 
   get field() { return this.form.controls; }
@@ -40,9 +44,7 @@ export class CreateOrderComponent implements OnInit {
     
     this.orderService.postOrder(form.value).subscribe(
       res => {
-        form.reset();
-        this.submitted = false;
-        this.orderService.getOrders();
+        this.router.navigate(['orders']);
       },
       err => {
         console.log(err);

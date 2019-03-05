@@ -32,12 +32,14 @@ namespace RestaurantApp.Service.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Payment>> GetPayment(int id)
         {
-            var payment = await _context.Payments.Include(p => p.PaymentMethod).Where(p => p.OrderID == id).FirstOrDefaultAsync();
+            var payment = await _context.Payments.Include(p => p.PaymentMethod).FirstOrDefaultAsync(p => p.OrderID == id);
 
             if (payment == null)
+            {
                 return NotFound();
+            }
 
-            return Ok(payment);
+            return payment;
         }
 
         // PUT: api/Payments/5
@@ -45,7 +47,9 @@ namespace RestaurantApp.Service.Controllers
         public async Task<IActionResult> PutPayment(int id, Payment payment)
         {
             if (id != payment.ID)
+            {
                 return BadRequest();
+            }
 
             _context.Entry(payment).State = EntityState.Modified;
 
@@ -56,24 +60,32 @@ namespace RestaurantApp.Service.Controllers
             catch (DbUpdateConcurrencyException)
             {
                 if (!PaymentExists(id))
+                {
                     return NotFound();
+                }
                 else
+                {
                     throw;
+                }
             }
 
             return NoContent();
         }
 
         // POST: api/Payments
-        [HttpPost("{total}")]
-        public async Task<ActionResult<Payment>> PostPayment([FromRoute] double total, Payment payment)
+        [HttpPost]
+        public async Task<ActionResult<Payment>> PostPayment([FromBody] Payment payment)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
             var order = await _context.Orders.FindAsync(payment.OrderID);
             var table = await _context.Tables.FindAsync(order.TableID);
 
-            order.IsPaid = true;
-            payment.Total = total;
             payment.CreatedAt = DateTime.Now;
+            order.IsPaid = true;
             table.IsAvailable = true;
 
             _context.Payments.Add(payment);
@@ -96,20 +108,14 @@ namespace RestaurantApp.Service.Controllers
         {
             var payment = await _context.Payments.FindAsync(id);
             if (payment == null)
+            {
                 return NotFound();
+            }
 
             _context.Payments.Remove(payment);
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-
-            return Ok(payment);
+            return payment;
         }
 
         private bool PaymentExists(int id)
