@@ -36,6 +36,10 @@ import { SummaryPipe } from './_helpers/summary.pipe';
 import { OrderFormComponent } from './components/order/order-form/order-form.component';
 import { OrderViewComponent } from './components/order/order-view/order-view.component';
 import { OrderCompleteComponent } from './components/order/order-complete/order-complete.component';
+import { ActiveOrderComponent } from './components/home/active-order/active-order.component';
+import { TableOverviewComponent } from './components/home/table-overview/table-overview.component';
+import { RecentOrderProductComponent } from './components/home/recent-order-product/recent-order-product.component';
+import { OrderOverviewComponent } from './components/home/order-overview/order-overview.component';
 
 const routes: Route[] = [
   { path: '', component: HomeComponent, canActivate: [ AuthGuard ] },
@@ -85,7 +89,11 @@ const routes: Route[] = [
     SummaryPipe,
     OrderFormComponent,
     OrderViewComponent,
-    OrderCompleteComponent
+    OrderCompleteComponent,
+    ActiveOrderComponent,
+    TableOverviewComponent,
+    RecentOrderProductComponent,
+    OrderOverviewComponent
   ],
   imports: [
     BrowserModule,
@@ -112,6 +120,7 @@ const routes: Route[] = [
     }
   ],
   entryComponents: [
+    OrderOverviewComponent
   ],
   bootstrap: [AppComponent]
 })

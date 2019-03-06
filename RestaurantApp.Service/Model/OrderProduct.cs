@@ -16,5 +16,8 @@ namespace RestaurantApp.Service.Model
 
         [ForeignKey("ProductID")]
         public virtual Product Product { get; set; }
+
+        [ForeignKey("OrderID")]
+        public virtual Order Order { get; set; }
     }
 }

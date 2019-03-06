@@ -24,7 +24,7 @@
     </div>
     <div class="col">
       <label>Table</label>
-      <select
+      <select [attr.disabled]="id ? '' : null"
         class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.tableID.errors }" (change)="setName($event.target)"
         formControlName="tableID">
         <option [value]="table.id" *ngFor="let table of tables">{{ table.tableName }}</option>

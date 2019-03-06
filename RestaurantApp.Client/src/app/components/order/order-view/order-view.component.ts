@@ -98,4 +98,13 @@ export class OrderViewComponent implements OnInit {
     }
   }
 
+  get sumProduct () {
+    let sum = 0;
+    for (let product in this.orderProducts) {
+      sum += this.orderProducts[product].quantity;
+    }
+
+    return sum;
+  }
+
 }

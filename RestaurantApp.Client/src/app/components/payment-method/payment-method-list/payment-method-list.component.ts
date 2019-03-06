@@ -24,7 +24,7 @@ export class PaymentMethodListComponent implements OnInit {
         this.usage = res;
         
         if (this.usage === true) {
-          this.toastr.error('You cannot delete ' +  method.name + ' since it is using on an order.', 'Error');
+          this.toastr.warning('You cannot delete ' +  method.name + ' since it is using on an order.', 'Warning');
         } else {
           if (!(confirm('Are you sure you want to delete ' + method.name + '?'))) { return; }
 

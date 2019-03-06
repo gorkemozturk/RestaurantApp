@@ -9,6 +9,7 @@ export class HomeComponent implements OnInit {
   dailyGains: number = 0;
   weeklyGains: number = 0;
   monthlyGains: number = 0;
+  title: string = 'DASHBOARD';
 
   constructor(private statisticsService: StatisticsService) { }
 

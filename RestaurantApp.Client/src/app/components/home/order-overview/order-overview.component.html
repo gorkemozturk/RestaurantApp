@@ -1,0 +1,66 @@
+<div *ngIf="!result" class="card bg-light rounded-0">
+  <div class="rounded-0 text-center card-header">
+    <h6>{{ table.tableName | uppercase }}</h6>
+  </div>
+  <div class="rounded-0 card-body">
+    <div class="alert alert-info m-0 rounded-0" role="alert">
+      No order found on <strong>{{ table.tableName }}.</strong> 
+      You can 
+      <button 
+        [routerLink]="['/order/new']" 
+        [queryParams]="{ table: table.id }" 
+        class="btn btn-link p-0 font-weight-bold" 
+        matDialogClose>create
+      </button> 
+      a new order on this table.
+    </div>
+  </div>
+</div>
+
+<div *ngIf="result" class="card bg-light rounded-0">
+  <div class="rounded-0 text-center card-header">
+    <h6 class="m-0">{{ order.table?.tableName | uppercase }}</h6>
+  </div>
+  <div *ngIf="!products.length" class="rounded-0 card-body">
+    <div class="alert alert-info m-0 rounded-0" role="alert">
+      There are no any resourches to show here.
+    </div>
+  </div>
+  <div *ngIf="products.length" class="card-body rounded-0 p-0">
+    <table class="table m-0">
+      <thead>
+        <tr>
+          <th class="border-0" scope="col">#</th>
+          <th class="border-0" scope="col">PRODUCT</th>
+          <th class="border-0 text-right" scope="col">PRICE</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products; let i = index">
+          <td class="align-middle">{{ i+1 }}</td>
+          <td class="align-middle">
+            {{ product.product.productName }} x {{ product.quantity }}
+            <i *ngIf="!product.isDone" class="text-warning fas fa-exclamation-circle ml-2 mr-1"></i>
+            <small *ngIf="!product.isDone" class="font-weight-bold text-warning">PENDING</small>
+
+            <i *ngIf="product.isDone" class="text-success fas fa-check-circle ml-2 mr-1"></i>
+            <small *ngIf="product.isDone" class="font-weight-bold text-success">DONE</small>
+          </td>
+          <td class="align-middle text-right">{{ (product.product.price + (product.product.price * product.product.tax / 100)) * product.quantity | currency }}</td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <strong>TOTAL</strong>
+            <strong class="float-right">{{ order.total | currency }}</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="rounded-0 text-muted card-footer d-flex justify-content-between align-items-center">
+    <small>
+      TOTAL PRODUCT: {{ sumProduct }}
+    </small>
+    <button [routerLink]="['/order/' + order.id + '/view']" class="btn btn-link p-0 font-weight-bold" matDialogClose>Go to the Order</button>
+  </div>
+</div>

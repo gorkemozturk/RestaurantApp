@@ -14,8 +14,16 @@ export class OrderService {
     return this.http.get<any>(this.url);
   }
 
+  getACtiveOrders() {
+    return this.http.get<any>(this.url + 'active');
+  }
+
   getOrder(id: any) {
     return this.http.get<any>(this.url + id);
+  }
+
+  getOrderByTable(id: any) {
+    return this.http.get<any>(this.url + 'table/' + id);
   }
 
   postOrder(order: Order) {

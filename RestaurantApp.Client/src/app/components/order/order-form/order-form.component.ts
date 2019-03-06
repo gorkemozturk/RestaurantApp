@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { OrderService } from 'src/app/_services/order.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Table } from 'src/app/_models/table';
 import { TableService } from 'src/app/_services/table.service';
 
@@ -14,15 +14,32 @@ export class OrderFormComponent implements OnInit {
   form: FormGroup;
   submitted: boolean = false;
   tables: Table[] = [];
+  id: any = {};
+  table: any = {};
   
   constructor(
     private orderService: OrderService, 
     private tableService: TableService, 
     private fb: FormBuilder, 
-    private router: Router) { }
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.id = this.route.snapshot.queryParamMap.get('table');
+
     this.tableService.getAvaliableTables().subscribe(res => this.tables = res);
+
+    if (this.id) {
+      this.tableService.getTable(this.id).subscribe(
+        res => {
+          this.table = res;
+          this.form.setValue({
+            orderName: this.table.tableName + "'s Order at " + new Date().toLocaleDateString() + ' - ' + new Date().toLocaleTimeString(),
+            tableID: this.id
+          });
+        }
+      );
+    }
 
     this.form = this.fb.group({
       orderName: [null, [Validators.required, Validators.maxLength(50)]],

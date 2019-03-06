@@ -1,49 +1,57 @@
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white p-0">
+    <li class="breadcrumb-item active">Home</li>
+  </ol>
+</nav>
+
+<h6>{{ 'Statistics' | uppercase }}</h6>
 <div class="row">
-  <div class="col-9">
-    <div class="row">
-      <div class="col-4">
-        <div class="card bg-info text-white rounded-0">
-          <div class="card-body rounded-0 text-center">
-            <h4 class="m-0">{{ dailyGains | currency }}</h4>
-            Daily Gains
-          </div>
-          <div class="text-right text-light rounded-0 p-2 card-footer">
-            <small>
-              <i class="fas fa-sync-alt"></i>
-              Updated Recently
-            </small>
-          </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="card bg-success text-white rounded-0">
-          <div class="card-body rounded-0 text-center">
-            <h4 class="m-0">{{ weeklyGains | currency }}</h4>
-            Weekly Gains
-          </div>
-          <div class="text-right text-light rounded-0 p-2 card-footer">
-            <small>
-              <i class="fas fa-sync-alt"></i>
-              Updated Recently
-            </small>
-          </div>
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="card bg-warning text-white rounded-0">
-          <div class="card-body rounded-0 text-center">
-            <h4 class="m-0">{{ monthlyGains | currency }}</h4>
-            Monthly Gains
-          </div>
-          <div class="text-right text-light rounded-0 p-2 card-footer">
-            <small>
-              <i class="fas fa-sync-alt"></i>
-              Updated Recently
-            </small>
-          </div>
-        </div>
+  <div class="col-4">
+    <div class="card bg-info text-white rounded-0">
+      <div class="card-body rounded-0 p-2 text-center">
+        <h4 class="m-0">{{ dailyGains | currency }}</h4>
+        Daily Gains
       </div>
     </div>
   </div>
-  <div class="col-3">d</div>
+
+  <div class="col-4">
+    <div class="card bg-success text-white rounded-0">
+      <div class="card-body rounded-0 p-2 text-center">
+        <h4 class="m-0">{{ weeklyGains | currency }}</h4>
+        Weekly Gains
+      </div>
+    </div>
+  </div>
+
+  <div class="col-4">
+    <div class="card bg-warning text-white rounded-0">
+      <div class="card-body rounded-0 p-2 text-center">
+        <h4 class="m-0">{{ monthlyGains | currency }}</h4>
+        Monthly Gains
+      </div>
+    </div>
+  </div>
+
+  <div class="w-100 my-3"></div>
+
+  <div class="col">
+    <h6>{{ 'Table Overview' | uppercase }}</h6>
+    <app-table-overview></app-table-overview>
+  </div>
+
+  <div class="w-100 my-3"></div>
+
+  <div class="col">
+      <h6>{{ 'Recent Products' | uppercase }}</h6>
+      <app-recent-order-product></app-recent-order-product>
+  </div>
+
+  <div class="col">
+    <h6>{{ 'Active Products' | uppercase }}</h6>
+    <app-active-order></app-active-order> 
+  </div>
+
 </div>

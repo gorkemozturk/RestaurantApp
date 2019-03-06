@@ -36,7 +36,7 @@
   <div class="w-100"></div>
 
   <div class="col">
-    <div class="card border-info rounded-0">
+    <div class="card rounded-0">
       <div *ngIf="!orderProducts.length" class="card-body rounded-0">
         <div class="alert alert-info m-0 rounded-0" role="alert">
           There are no any resources to show here.
@@ -79,7 +79,7 @@
         </table>
       </div>
       <div class="card-footer text-center text-muted rounded-0">
-        <small>TOTAL PRODUCTS IN CURRENT ORDER: {{ orderProducts.length }}</small>
+        <small>TOTAL PRODUCTS IN CURRENT ORDER: {{ sumProduct }}</small>
       </div>
     </div>
   </div>
@@ -88,7 +88,7 @@
       This order has been paid on <strong>{{ payment.createdAt | date }}</strong> for <strong>{{ payment.total | currency }}</strong> as <strong>{{ payment.paymentMethod?.name }}</strong>.
     </div>
     
-    <div *ngIf="!order.isPaid" class="card border-info rounded-0">
+    <div *ngIf="!order.isPaid" class="card rounded-0">
       <div *ngIf="!products.length" class="card-body rounded-0">
         <div class="alert alert-info m-0 rounded-0" role="alert">
           There are no any resources to show here.

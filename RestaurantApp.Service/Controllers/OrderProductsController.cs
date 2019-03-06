@@ -23,6 +23,16 @@ namespace RestaurantApp.Service.Controllers
             _context = context;
         }
 
+        [HttpGet("recent")]
+        public async Task<ActionResult<IEnumerable<OrderProduct>>> GetRecentOrderProducts()
+        {
+            var orderProducts = await _context.OrderProducts.Include(o => o.Product).Include(o => o.Order).ThenInclude(o => o.Table).Where(o => o.Order.IsPaid == false).OrderByDescending(o => o.ID).ToListAsync();
+            if (orderProducts == null)
+                return NotFound();
+
+            return Ok(orderProducts);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<OrderProduct>>> GetOrderProducts([FromRoute] int id)
         {

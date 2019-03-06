@@ -28,6 +28,13 @@ namespace RestaurantApp.Service.Controllers
             return await _context.Orders.Include(o => o.Table).Include(o => o.Waiter).OrderByDescending(o => o.CreatedAt).ToListAsync();
         }
 
+        // GET: api/Orders/active
+        [HttpGet("active")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetActiveOrders()
+        {
+            return await _context.Orders.Include(o => o.Table).Include(o => o.Waiter).OrderByDescending(o => o.CreatedAt).Where(o => o.IsPaid == false).ToListAsync();
+        }
+
         // GET: api/Orders/5/total
         [HttpGet("{id}/total")]
         public async Task<IActionResult> GetOrderTotal([FromRoute] int id)
@@ -74,6 +81,20 @@ namespace RestaurantApp.Service.Controllers
             if (order == null)
             {
                 return NotFound();
+            }
+
+            return order;
+        }
+
+        // GET: api/Orders/5
+        [HttpGet("table/{id}")]
+        public async Task<ActionResult<Order>> GetOrderByTable(int id)
+        {
+            var order = await _context.Orders.Where(o => o.TableID == id).Where(o => o.IsPaid == false).Include(o => o.Table).FirstOrDefaultAsync();
+
+            if (order == null)
+            {
+                return NoContent();
             }
 
             return order;

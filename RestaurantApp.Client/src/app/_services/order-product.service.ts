@@ -14,6 +14,10 @@ export class OrderProductService {
     return this.http.get<any>(this.url + id);
   }
 
+  getRecentOrderProducts() {
+    return this.http.get<any>(this.url + 'recent');
+  }
+
   postOrderProduct(orderID: number, product: any) {
     return this.http.post<any>(this.url + 'order/' + orderID + '/product/' + product.id, product);
   }
