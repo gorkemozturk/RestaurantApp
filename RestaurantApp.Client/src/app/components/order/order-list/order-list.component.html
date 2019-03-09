@@ -7,7 +7,7 @@
   </ol>
 </nav>
 
-<a routerLink="/order/new" class="btn btn-sm btn-info float-right mb-3 px-5">Create a New Order</a>
+<a routerLink="/order/new" class="btn btn-info btn-sm float-right mb-3 px-5 py-2">Create a New Order</a>
 
 <div class="clearfix"></div>
 
@@ -27,13 +27,14 @@
           <th class="border-0" scope="col">TOTAL</th>
           <th class="border-0 text-center" scope="col">STATUS</th>
           <th class="border-0" scope="col">WAITER</th>
+          <th class="border-0" scope="col">CREATED AT</th>
           <th class="border-0"></th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of orders; let i = index">
+        <tr *ngFor="let order of orders | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
           <td>{{ i+1 }}</td>
-          <td class="align-middle"><a class="text-info" [routerLink]="['/order/' + order.id + '/view']">{{ order.orderName | summary }}</a></td>
+          <td class="align-middle"><a class="text-info font-weight-bold" [routerLink]="['/order/' + order.id + '/view']">{{ order.orderName }}</a></td>
           <td class="align-middle">{{ order.table.tableName }}</td>
           <td class="align-middle">{{ order.total | currency }}</td>
           <td class="align-middle text-center">
@@ -44,15 +45,21 @@
             <small *ngIf="order.isPaid" class="text-success font-weight-bold">PAID</small>
           </td>
           <td>{{ order.waiter.firstName }} {{ order.waiter.lastName }}</td>
+          <td>{{ order.createdAt | date:'dd.MM.yyyy, hh:MM:ss' }}</td>
           <td class="text-right">
-            <a style="cursor: pointer; text-decoration: none !important" [routerLink]="['/order/' + order.id + '/view']" class="text-info fas fa-info-circle"></a>
-            <i *ngIf="!order.isPaid" style="cursor: pointer" (click)="onDelete(order)" class="text-danger far fa-times-circle ml-2"></i>
+            <a [routerLink]="['/order/' + order.id + '/view']" class="btn btn-outline-info btn-sm px-3">
+              <i class="far fa-eye"></i> View
+            </a>
+            <button class="btn btn-outline-danger btn-sm px-3 ml-2" (click)="onDelete(order)" *ngIf="authService.currentUser.typ == 'Officer' || !order.isPaid">
+              <i class="far fa-trash-alt"></i> Delete
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="card-footer text-center text-muted rounded-0">
+  <div class="card-footer text-center text-muted rounded-0 d-flex align-items-center justify-content-between">
     <small>TOTAL ORDERS: {{ orders.length }}</small>
+    <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="orders.length"></ngb-pagination>
   </div>
 </div>

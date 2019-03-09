@@ -9,27 +9,27 @@
   </ol>
 </nav>
 
-<a [routerLink]="['/order/' + order.id + '/view']" class="btn btn-outline-secondary btn-sm mb-3">
-  <i class="fas fa-chevron-left"></i> Back to the Order
+<a [routerLink]="['/order/' + order.id + '/view']" class="btn btn-outline-secondary btn-sm mb-3 px-5 rounded-pill py-2">
+  <i class="fas fa-chevron-left"></i> Back
 </a>
 
-<div *ngIf="order.isPaid" class="alert alert-info rounded-0" role="alert">
+<div *ngIf="order.isPaid" class="alert alert-info rounded-0" role="alert" class="w-50">
   This <strong>{{ order.orderName }}</strong> alread has been paid. You cannot complete this order again.
 </div>
 
-<div *ngIf="!status" class="alert alert-warning rounded-0" role="alert">
+<div *ngIf="!status" class="alert alert-warning rounded-0" role="alert" class="w-50">
   You cannot complete <strong>{{ order.orderName }}</strong>  since it's products are not ready. To complete this order, all product(s) which belongs to the order have to get ready.
 </div>
 
-<div *ngIf="!orderProducts.length" class="alert alert-warning rounded-0" role="alert">
+<div *ngIf="!orderProducts.length" class="alert alert-warning rounded-0" role="alert" class="w-50">
   You cannot complete <strong>{{ order.orderName }}</strong> since it is empty.
 </div>
 
-<form [formGroup]="form" autocomplete="off">
+<form [formGroup]="form" autocomplete="off" class="w-50">
   <div class="form-group">
     <label>Payment Method</label>
     <select
-      class="form-control form-control-sm"
+      class="form-control"
       [ngClass]="{ 'is-invalid': submitted && field.paymentMethodID.errors }"
       [attr.disabled]="order.isPaid || !status || !orderProducts.length ? '' : null"
       formControlName="paymentMethodID">
@@ -39,6 +39,6 @@
       <div *ngIf="field.paymentMethodID.errors.required">The payment method field is required.</div>
     </div>
   </div>
-  <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-info btn-sm px-5 float-right" (click)="onSubmit(form)">Complete Order for {{ order.total | currency }}</button>
-  <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-secondary btn-sm px-5 float-right mr-2" (click)="reset(form)">Reset</button>
+  <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-info btn-sm px-5 py-2 rounded-pill float-right" (click)="onSubmit(form)">Complete Order for {{ order.total | currency }}</button>
+  <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-secondary btn-sm px-5 py-2 rounded-pill float-right mr-2" (click)="reset(form)">Reset</button>
 </form>

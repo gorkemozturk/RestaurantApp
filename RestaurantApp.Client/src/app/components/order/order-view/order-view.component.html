@@ -1,4 +1,4 @@
-<h4>{{ order.orderName | uppercase }}</h4>
+<h4>[{{ order.table?.tableName }}]: {{ order.orderName | uppercase }}</h4>
 
 <nav aria-label="breadcrumb" class="mb-5">
   <ol class="breadcrumb bg-white p-0">
@@ -10,18 +10,18 @@
 
 <div class="row mb-3">
   <div class="col">
-    <a routerLink="/orders" class="btn btn-outline-secondary btn-sm">
-      <i class="fas fa-chevron-left"></i> Back to List
+    <a routerLink="/orders" class="btn btn-sm btn-outline-secondary py-2 px-5">
+      <i class="fas fa-chevron-left"></i> Back
     </a>
   </div>
   
   <div class="col text-right">
-    <a [class.disabled]="!orderProducts.length" [routerLink]="['/order/' + order.id + '/complete']" class="btn btn-secondary btn-sm">
-      Prınt the Order
+    <a [class.disabled]="!orderProducts.length" [routerLink]="['/order/' + order.id + '/complete']" class="btn btn-secondary btn-sm py-2 px-5">
+      Print the Order
     </a>
   
-    <a *ngIf="!order.isPaid" [class.disabled]="!status || !orderProducts.length" [routerLink]="['/order/' + order.id + '/complete']" class="btn btn-info btn-sm ml-2">
-      Complete This Order <span *ngIf="orderProducts.length">for {{ total | currency }}</span>
+    <a *ngIf="!order.isPaid" [class.disabled]="!status || !orderProducts.length" [routerLink]="['/order/' + order.id + '/complete']" class="btn btn-info btn-sm py-2 px-5 ml-2">
+      Complete This Order <span class="font-weight-bold" *ngIf="orderProducts.length">for {{ total | currency }}</span>
     </a>
   </div>
 </div>
@@ -29,7 +29,7 @@
 <div class="row">
   <div class="col">
     <div *ngIf="!status" class="alert alert-warning rounded-0" role="alert">
-      You cannot complete <strong>{{ order.orderName }}</strong>  since it's products are not ready. To complete this order, all product(s) which belongs to the order have to get ready.
+      You cannot complete <strong>{{ order.orderName }}</strong> since it's products are not served. To complete this order, all product(s) which belongs to the order have to serve.
     </div>
   </div>
 
@@ -55,17 +55,21 @@
                 <div>
                   {{ i+1 }}.
                   {{ product.product.productName }} x {{ product.quantity }}
-
-                  <i *ngIf="!product.isDone" class="text-warning fas fa-exclamation-circle ml-2 mr-1"></i>
-                  <small *ngIf="!product.isDone" class="font-weight-bold text-warning">PENDING</small>
-
-                  <i *ngIf="product.isDone" class="text-success fas fa-check-circle ml-2 mr-1"></i>
-                  <small *ngIf="product.isDone" class="font-weight-bold text-success">DONE</small>
+                  <app-order-product-status [product]="product"></app-order-product-status>
                 </div>
+                
                 <div>
                   {{ (product.product.price + (product.product.price * product.product.tax / 100)) * product.quantity | currency }}
-                  <i (click)="confirmProduct(product)" *ngIf="!product.isDone" style="cursor: pointer;" class="text-success fas fa-check-circle ml-2"></i>
-                  <i (click)="onDelete(product)" *ngIf="!product.isDone" style="cursor: pointer;" class="text-danger fas fa-arrow-circle-right ml-2"></i>
+                  
+                  <button (click)="confirmProduct(product)" *ngIf="!product.isDone && !product.isServed" class="btn btn-sm btn-outline-success px-3 ml-2">
+                    <i class="fas fa-check"></i> Ready
+                  </button>
+                  <button (click)="confirmProduct(product)" *ngIf="product.isDone && !product.isServed" class="btn btn-sm btn-outline-info px-3 ml-2">
+                    <i class="fas fa-concierge-bell"></i> Serve
+                  </button>
+                  <button (click)="onDelete(product)" *ngIf="!product.isServed" class="btn btn-sm btn-outline-danger px-3 ml-2">
+                    Remove <i class="fas fa-arrow-circle-right"></i>
+                  </button>
                 </div>
               </td>
             </tr>

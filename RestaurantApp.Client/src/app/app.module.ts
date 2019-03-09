@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { ToastrModule } from 'ngx-toastr';
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -40,13 +41,22 @@ import { ActiveOrderComponent } from './components/home/active-order/active-orde
 import { TableOverviewComponent } from './components/home/table-overview/table-overview.component';
 import { RecentOrderProductComponent } from './components/home/recent-order-product/recent-order-product.component';
 import { OrderOverviewComponent } from './components/home/order-overview/order-overview.component';
+import { LoginGuard } from './_guards/login.guard';
+import { PaymentComponent } from './components/payment/payment.component';
+import { UserService } from './_services/user.service';
+import { TableStatusComponent } from './components/home/table-status/table-status.component';
+import { RecentPaymentComponent } from './components/home/recent-payment/recent-payment.component';
+import { UserListComponent } from './components/user/user-list/user-list.component';
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { OrderProductStatusComponent } from './components/order-product-status/order-product-status.component';
+import { KitchenComponent } from './components/kitchen/kitchen.component';
 
 const routes: Route[] = [
   { path: '', component: HomeComponent, canActivate: [ AuthGuard ] },
 
   // Authantications routes.
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent, canActivate: [ LoginGuard ] },
+  { path: 'login', component: LoginComponent, canActivate: [ LoginGuard ] },
 
   // Table components routes.
   { path: 'tables', component: TableListComponent, canActivate: [ AuthGuard ] },
@@ -67,7 +77,14 @@ const routes: Route[] = [
   { path: 'orders', component: OrderListComponent, canActivate: [ AuthGuard ] },
   { path: 'order/new', component: OrderFormComponent, canActivate: [ AuthGuard ] },
   { path: 'order/:id/view', component: OrderViewComponent, canActivate: [ AuthGuard ] },
-  { path: 'order/:id/complete', component: OrderCompleteComponent, canActivate: [ AuthGuard ] }
+  { path: 'order/:id/complete', component: OrderCompleteComponent, canActivate: [ AuthGuard ] },
+
+  // Payment component route.
+  { path: 'payments', component: PaymentComponent, canActivate: [ AuthGuard ] },
+
+  // User component routes.
+  { path: 'users', component: UserListComponent, canActivate: [ AuthGuard ] },
+  { path: 'user/:id/profile', component: UserProfileComponent, canActivate: [ AuthGuard ] }
 ]
 
 @NgModule({
@@ -93,7 +110,14 @@ const routes: Route[] = [
     ActiveOrderComponent,
     TableOverviewComponent,
     RecentOrderProductComponent,
-    OrderOverviewComponent
+    OrderOverviewComponent,
+    PaymentComponent,
+    TableStatusComponent,
+    RecentPaymentComponent,
+    UserListComponent,
+    UserProfileComponent,
+    OrderProductStatusComponent,
+    KitchenComponent
   ],
   imports: [
     BrowserModule,
@@ -102,7 +126,8 @@ const routes: Route[] = [
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgbPaginationModule
   ],
   providers: [
     AuthService,
@@ -113,6 +138,7 @@ const routes: Route[] = [
     PaymentMethodService,
     PaymentService,
     StatisticsService,
+    UserService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

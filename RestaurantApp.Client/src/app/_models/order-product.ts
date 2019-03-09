@@ -4,4 +4,5 @@ export class OrderProduct {
     productID: number;
     quantity: number;
     isDone: boolean;
+    isServed: boolean;
 }

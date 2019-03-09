@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PaymentMethod } from 'src/app/_models/payment-method';
 import { PaymentMethodService } from 'src/app/_services/payment-method.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-payment-method-list',
@@ -12,7 +13,11 @@ export class PaymentMethodListComponent implements OnInit {
   methods: PaymentMethod[] = [];
   usage: boolean = false;
 
-  constructor(private service: PaymentMethodService, private toastr: ToastrService) { }
+  page = 1;
+  pageSize = 5;
+  collectionSize = this.methods.length;
+
+  constructor(private service: PaymentMethodService, private toastr: ToastrService, private authService: AuthService) { }
 
   ngOnInit() {
     this.service.getPaymentMethods().subscribe(res => this.methods = res);
@@ -36,10 +41,14 @@ export class PaymentMethodListComponent implements OnInit {
             },
             err => {
               console.log(err);
-              alert(err);
+              this.toastr.error('An error has been occurred during the process.', 'Error');
             }
           );
         }
+      },
+      err => {
+        console.log(err);
+        this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
   }

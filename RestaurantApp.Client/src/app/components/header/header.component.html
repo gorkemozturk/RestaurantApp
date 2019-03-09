@@ -1,19 +1,33 @@
-<div style="border-bottom: medium solid" class="border-light">
-  <ul class="nav justify-content-center">
-    <li class="nav-item">
-      <a class="text-dark nav-link" *ngIf="authService.isAuthanticated" routerLinkActive="active" routerLink="/">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="text-dark nav-link" *ngIf="authService.isAuthanticated" routerLinkActive="active" routerLink="/tables">Tables</a>
-    </li>
-    <li class="nav-item">
-      <a class="text-dark nav-link" *ngIf="authService.isAuthanticated" routerLinkActive="active" routerLink="/products">Products</a>
-    </li>
-    <li class="nav-item">
-      <a class="text-dark nav-link" *ngIf="authService.isAuthanticated" routerLinkActive="active" routerLink="payment-methods">Payment Methods</a>
-    </li>
-    <li class="nav-item">
-      <a class="text-dark nav-link" *ngIf="authService.isAuthanticated" routerLinkActive="active" routerLink="/orders">Orders</a>
-    </li>
-  </ul>
+<div class="py-3 bg-white">
+  <div class="container d-flex align-items-center justify-content-between">
+    <img style="width: 160px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/T%C3%BCrk_Telekom_logo.svg/1200px-T%C3%BCrk_Telekom_logo.svg.png">
+    
+    <div class="d-flex align-items-center justify-content-between">
+      <div class="p-2 px-3 text-dark">
+        <i class="py-3 pr-3 mr-3 fas fa-mobile-alt border-dark border-right"></i>
+        <div class="float-right">
+          <small>TELEFON</small> <br>
+          <strong>0555 559 20 77</strong>
+        </div>
+      </div>
+    
+      <div *ngIf="authService.isAuthanticated" class="ml-5 bg-info text-white rounded p-2 px-3">
+        <div class="float-left">
+          <small>WELCOME {{ authService.currentUser.typ | uppercase }}</small> <br>
+          <strong>{{ authService.currentUser.given_name }}</strong>
+        </div>
+        <i (click)="logout()" style="cursor: pointer;" class="py-3 pl-3 ml-3 fas fa-power-off border-white border-left"></i>
+      </div>
+
+      <div *ngIf="!authService.isAuthanticated" class="ml-5 bg-info text-white p-2 px-3">
+        <div class="float-left">
+          <small>WELCOME</small> <br>
+          <a routerLink="/login" class="text-white font-weight-bold">Login</a>
+          <small class="mx-2">OR</small>
+          <a routerLink="/register" class="text-white font-weight-bold">Register</a>
+        </div>
+        <i class="py-3 pl-3 ml-3 far fa-user border-white border-left"></i>
+      </div>
+    </div>
+  </div>
 </div>

@@ -7,7 +7,7 @@
   </ol>
 </nav>
 
-<a routerLink="/payment-method/new" class="btn btn-sm btn-info float-right mb-3 px-5">Create a New Payment Method</a>
+<a routerLink="/payment-method/new" class="btn btn-sm btn-info float-right mb-3 px-5 py-2">Create a New Payment Method</a>
 
 <div class="clearfix"></div>
 
@@ -27,18 +27,23 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let method of methods; let i = index">
+        <tr *ngFor="let method of methods | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
           <td class="align-middle">{{ i+1}}</td>
           <td class="align-middle">{{ method.name }}</td>
           <td class="text-right">
-            <a style="cursor: pointer; text-decoration: none !important" [routerLink]="['/payment-method/' + method.id + '/edit']" class="text-info far fa-edit mr-2"></a>
-            <i style="cursor: pointer" (click)="onDelete(method)" class="text-danger far fa-times-circle"></i>
+            <a [routerLink]="['/payment-method/' + method.id + '/edit']" class="btn btn-outline-info btn-sm px-3">
+              <i class="far fa-edit"></i> Edit
+            </a>
+            <button class="btn btn-outline-danger btn-sm px-3 ml-2" (click)="onDelete(method)" *ngIf="authService.currentUser.typ == 'Officer'">
+              <i class="far fa-trash-alt"></i> Delete
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <div class="card-footer text-center text-muted rounded-0">
+  <div class="card-footer text-center text-muted rounded-0 d-flex align-items-center justify-content-between">
     <small>TOTAL PAYMENT METHODS: {{ methods.length }}</small>
+    <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="methods.length"></ngb-pagination>
   </div>
 </div>

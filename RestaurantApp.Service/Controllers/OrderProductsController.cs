@@ -108,7 +108,10 @@ namespace RestaurantApp.Service.Controllers
 
             var existingOrderProduct = await _context.OrderProducts.FindAsync(id);
 
-            existingOrderProduct.IsDone = !existingOrderProduct.IsDone;
+            if (existingOrderProduct.IsDone == false)
+                existingOrderProduct.IsDone = !existingOrderProduct.IsDone;
+            else
+                existingOrderProduct.IsServed = !existingOrderProduct.IsServed;
 
             try
             {

@@ -1,23 +1,28 @@
 <div class="card rounded-0">
-  <div class="bg-white rounded-0 text-center card-header">
-    <small>
-      ORDER OVERVIEW
-    </small>
-  </div>
-  <div class="card-body rounded-0 py-1 text-center">
-    <div class="row">
-      <div class="col-md-2 p-1" *ngFor="let table of tables">
-        <div [ngClass]="setClass(table)" class="card rounded-0" style="border-width: thin; cursor: pointer;">
-          <div class="card-body rounded-0 px-1 py-2 text-center" (click)="openOrderDialog(table.id)">
-            {{ table.tableName }}
+    <div class="bg-white rounded-0 text-center card-header">
+      <small>
+        TABLE OVERVIEWS
+      </small>
+    </div>
+    <div class="card-body rounded-0" *ngIf="!tables.length">
+      <div class="alert alert-info m-0 rounded-0" role="alert">
+        There are no any resources to show here.
+      </div>
+    </div>
+    <div *ngIf="tables.length" class="card-body rounded-0 py-1 text-center">
+      <div class="row">
+        <div class="col-md-2 p-1" *ngFor="let table of tables">
+          <div [ngClass]="setClass(table)" class="card rounded-0" style="border-width: thin; cursor: pointer;">
+            <div class="card-body rounded-0 px-1 py-2 text-center" (click)="openOrderDialog(table.id)">
+              {{ table.tableName }}
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div class="rounded-0 text-center text-uppercase text-muted card-footer">
+      <small>
+        Updated Recently
+      </small>
+    </div>
   </div>
-  <div class="rounded-0 text-center card-footer">
-    <small>
-      Updated Recently
-    </small>
-  </div>
-</div>

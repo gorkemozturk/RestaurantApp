@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace RestaurantApp.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -76,7 +78,7 @@ namespace RestaurantApp.Service.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.Include(o => o.Table).FirstOrDefaultAsync(o => o.ID == id);
 
             if (order == null)
             {
@@ -169,6 +171,10 @@ namespace RestaurantApp.Service.Controllers
                 return NotFound();
             }
 
+            var table = await _context.Tables.FindAsync(order.TableID);
+
+            table.IsAvailable = true;
+
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
 
@@ -179,7 +185,7 @@ namespace RestaurantApp.Service.Controllers
         [HttpGet("{id}/status")]
         public async Task<bool> IsOderReady([FromRoute] int id)
         {
-            var readyProducts = await _context.OrderProducts.Where(p => p.OrderID == id).Where(p => p.IsDone == true).CountAsync();
+            var readyProducts = await _context.OrderProducts.Where(p => p.OrderID == id).Where(p => p.IsServed == true).CountAsync();
             var products = await _context.OrderProducts.Where(p => p.OrderID == id).CountAsync();
 
             if (readyProducts == products)

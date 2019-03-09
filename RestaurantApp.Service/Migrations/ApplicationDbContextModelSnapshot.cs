@@ -222,6 +222,8 @@ namespace RestaurantApp.Service.Migrations
 
                     b.Property<bool>("IsDone");
 
+                    b.Property<bool>("IsServed");
+
                     b.Property<int>("OrderID");
 
                     b.Property<int>("ProductID");
@@ -229,6 +231,8 @@ namespace RestaurantApp.Service.Migrations
                     b.Property<int>("Quantity");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("OrderID");
 
                     b.HasIndex("ProductID");
 
@@ -313,12 +317,21 @@ namespace RestaurantApp.Service.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("City")
+                        .HasMaxLength(25);
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasMaxLength(25);
+
+                    b.Property<string>("Province")
                         .HasMaxLength(25);
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
@@ -383,6 +396,11 @@ namespace RestaurantApp.Service.Migrations
 
             modelBuilder.Entity("RestaurantApp.Service.Model.OrderProduct", b =>
                 {
+                    b.HasOne("RestaurantApp.Service.Model.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("RestaurantApp.Service.Model.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")

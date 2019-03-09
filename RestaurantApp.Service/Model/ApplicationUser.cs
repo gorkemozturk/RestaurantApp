@@ -16,5 +16,14 @@ namespace RestaurantApp.Service.Model
         [Required]
         [MaxLength(25)]
         public string LastName { get; set; }
+
+        [MaxLength(25)]
+        public string City { get; set; }
+
+        [MaxLength(25)]
+        public string Province { get; set; }
+
+        [MaxLength(150)]
+        public string Address { get; set; }
     }
 }

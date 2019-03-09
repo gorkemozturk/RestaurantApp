@@ -8,19 +8,19 @@
   </ol>
 </nav>
 
-<a routerLink="/tables" class="btn btn-outline-secondary btn-sm mb-3">
-  <i class="fas fa-chevron-left"></i> Back to List
+<a routerLink="/tables" class="btn btn-outline-secondary btn-sm mb-3 px-5 py-2">
+  <i class="fas fa-chevron-left"></i> Back
 </a>
 
-<form [formGroup]="form" autocomplete="off">
+<form [formGroup]="form" autocomplete="off" class="w-50">
   <div class="form-group">
     <label>Table Name</label>
-    <input formControlName="tableName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.tableName.errors }"/>
+    <input formControlName="tableName" class="form-control" [ngClass]="{ 'is-invalid': submitted && field.tableName.errors }"/>
     <div *ngIf="submitted && field.tableName.errors" class="invalid-feedback">
       <div *ngIf="field.tableName.errors.required">The table name field is required.</div>
       <div *ngIf="field.tableName.errors.maxlength">The table name field must be 10 characters at most.</div>
     </div>
   </div>
-  <button class="btn btn-info btn-sm px-5 float-right" (click)="onSubmit(form)">Submit</button>
-  <button class="btn btn-secondary btn-sm px-5 float-right mr-2" (click)="reset(form)">Reset</button>
+  <button class="btn btn-info btn-sm px-5 py-2 float-right" (click)="onSubmit(form)">Submit</button>
+  <button class="btn btn-secondary btn-sm px-5 py-2 mr-2 float-right" (click)="reset(form)">Reset</button>
 </form>

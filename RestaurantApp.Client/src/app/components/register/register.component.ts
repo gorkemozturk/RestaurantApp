@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/_services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { MustMatch } from 'src/app/_helpers/must-match.validator';
 
 @Component({
   selector: 'app-register',
@@ -12,15 +14,20 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   submitted: boolean = false;
   
-  constructor(private fb: FormBuilder, private service: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder, private service: AuthService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.form = this.fb.group({
       firstName: [null, [Validators.required, Validators.maxLength(50)]],
       lastName: [null, [Validators.required, Validators.maxLength(25)]],
       email: [null, [Validators.required, Validators.email]],
-      password: [null, Validators.required]
-    });
+      password: [null, Validators.required],
+      confirmPassword: ['', Validators.required]
+    },
+    {
+      validator: MustMatch('password', 'confirmPassword')
+    }
+    );
   }
 
   get field() { return this.form.controls; }
@@ -36,6 +43,7 @@ export class RegisterComponent implements OnInit {
       },
       err => {
         console.log(err);
+        this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
   }

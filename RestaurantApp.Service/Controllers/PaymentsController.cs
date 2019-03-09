@@ -27,8 +27,15 @@ namespace RestaurantApp.Service.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Payment>>> GetPayments()
         {
-            return await _context.Payments.ToListAsync();
+            return await _context.Payments.Include(p => p.Order).Include(p => p.PaymentMethod).OrderByDescending(o => o.CreatedAt).ToListAsync();
         }
+
+        [HttpGet("recent")]
+        public async Task<ActionResult<IEnumerable<Payment>>> GetRecentPayments()
+        {
+            return await _context.Payments.Take(10).OrderByDescending(o => o.CreatedAt).ToListAsync();
+        }
+
 
         // GET: api/Payments/5
         [HttpGet("{id}")]
@@ -113,6 +120,14 @@ namespace RestaurantApp.Service.Controllers
             {
                 return NotFound();
             }
+
+            var order = await _context.Orders.FindAsync(payment.OrderID);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.IsPaid = false;
 
             _context.Payments.Remove(payment);
             await _context.SaveChangesAsync();

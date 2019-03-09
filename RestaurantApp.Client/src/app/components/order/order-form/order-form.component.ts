@@ -61,7 +61,7 @@ export class OrderFormComponent implements OnInit {
     
     this.orderService.postOrder(form.value).subscribe(
       res => {
-        this.router.navigate(['orders']);
+        this.router.navigate(['/order/' + res.id + '/view']);
       },
       err => {
         console.log(err);

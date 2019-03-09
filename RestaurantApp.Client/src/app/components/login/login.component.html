@@ -1,28 +1,32 @@
-<div class="card bg-light rounded-0 w-25 mx-auto">
-    <div class="card-header text-center rounded-0">
-      {{ title }}
-    </div>
-    <div class="card-body rounded-0">
-      <form [formGroup]="form" autocomplete="off">
-        <div class="form-group">
-          <label>E-Mail</label>
-          <input formControlName="email" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.email.errors }"/>
-          <div *ngIf="submitted && field.email.errors" class="invalid-feedback">
-            <div *ngIf="field.email.errors.required">The email field is required.</div>
-            <div *ngIf="field.email.errors.email">The email field must be e-mail format.</div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input formControlName="password" type="password" class="form-control rounded-0" [ngClass]="{ 'is-invalid': submitted && field.password.errors }"/>
-          <div *ngIf="submitted && field.password.errors" class="invalid-feedback">
-            <div *ngIf="field.password.errors.required">The password field is required.</div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <div class="card-footer text-right rounded-0">
-      <button class="btn btn-sm btn-secondary rounded-0" (click)="reset(form)">Reset</button>
-      <button class="btn btn-sm btn-primary rounded-0 ml-1" (click)="onSubmit(form)">Login</button>
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white p-0">
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+
+<form [formGroup]="form" autocomplete="off" class="w-50 mx-auto">
+  <div class="form-group">
+    <label>E-Mail</label>
+    <input formControlName="email" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.email.errors }"/>
+    <div *ngIf="submitted && field.email.errors" class="invalid-feedback">
+      <div *ngIf="field.email.errors.required">The email field is required.</div>
+      <div *ngIf="field.email.errors.email">The email field must be e-mail format.</div>
     </div>
   </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input formControlName="password" type="password" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.password.errors }"/>
+    <div *ngIf="submitted && field.password.errors" class="invalid-feedback">
+      <div *ngIf="field.password.errors.required">The password field is required.</div>
+    </div>
+  </div>
+  <div class="d-flex align-items-center justify-content-between">
+    <small><a routerLink="/register" class="text-info text-uppercase text-sm">Do not you have an account? Register instantly.</a></small>
+    <div>
+      <button class="btn btn-sm btn-info ml-2 px-5" (click)="onSubmit(form)">{{ title }}</button>
+    </div>
+  </div>
+</form>

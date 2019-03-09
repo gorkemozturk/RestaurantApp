@@ -1,7 +1,7 @@
 <h4>{{ title | uppercase }}</h4>
 
 <nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-white p-0">
+  <ol class="breadcrumb bg-transparent border-0 p-0">
     <li class="breadcrumb-item active">Home</li>
   </ol>
 </nav>
@@ -38,20 +38,32 @@
   <div class="w-100 my-3"></div>
 
   <div class="col">
-    <h6>{{ 'Table Overview' | uppercase }}</h6>
-    <app-table-overview></app-table-overview>
-  </div>
-
-  <div class="w-100 my-3"></div>
-
-  <div class="col">
       <h6>{{ 'Recent Products' | uppercase }}</h6>
       <app-recent-order-product></app-recent-order-product>
   </div>
 
   <div class="col">
-    <h6>{{ 'Active Products' | uppercase }}</h6>
+    <h6>{{ 'Active Orders' | uppercase }}</h6>
     <app-active-order></app-active-order> 
+  </div>
+  
+  <div class="w-100 my-3"></div>
+
+  <div class="col">
+    <h6>{{ 'Table Overviews' | uppercase }}</h6>
+    <app-table-overview></app-table-overview>
+  </div>
+
+  <div class="w-100 my-3"></div>
+
+  <div class="col-6">
+    <h6>{{ 'Table Status' | uppercase }}</h6>
+    <app-table-status></app-table-status>
+  </div>
+  
+  <div class="col-6">
+    <h6>{{ 'Recent Payments' | uppercase }}</h6>
+    <app-recent-payment></app-recent-payment>
   </div>
 
 </div>

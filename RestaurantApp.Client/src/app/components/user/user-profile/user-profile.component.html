@@ -1,0 +1,60 @@
+<h4>{{ title | uppercase }}</h4>
+
+<nav aria-label="breadcrumb" class="mb-5">
+  <ol class="breadcrumb bg-white border-0 bg-transparent p-0">
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
+    <li class="breadcrumb-item"><a class="text-info" routerLink="/users">Users</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+  </ol>
+</nav>
+
+<a routerLink="/users" class="btn btn-outline-secondary btn-sm mb-3">
+  <i class="fas fa-chevron-left"></i> Back to List
+</a>
+
+<div class="row">
+  <div class="col-4">
+    <img class="img-fluid border border-light" src="https://www.iosicongallery.com/icons/bitmoji-2015-01-21/512.png">
+    <h5 class="font-weight-bold my-3">{{ user.firstName }} {{ user.lastName }}</h5>
+
+    <ul *ngIf="isExpanded" class="px-0 list-inline">
+      <li><i class="fas fa-location-arrow mr-1"></i> {{ user.city ? user.province : 'Unknown' }}, {{ user.city ? user.city : 'Unknown' }}</li>
+      <li><i class="far fa-envelope-open mr-1"></i> {{ user.email ? user.email : 'Unknown' }} </li>
+      <li><i class="fas fa-phone mr-1"></i> {{ user.phoneNumber ? user.phoneNumber : 'Unknown' }} </li>
+      <li><i class="far fa-compass mr-1"></i> {{ user.address ? user.address : 'Unknown' }}</li>
+    </ul>
+
+    <form [formGroup]="form" *ngIf="!isExpanded" action="">
+      <div class="form-group my-1">
+        <input placeholder="Phone Number" formControlName="phoneNumber" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.phoneNumber.errors }"/>
+        <div *ngIf="submitted && field.phoneNumber.errors" class="invalid-feedback">
+          <div *ngIf="field.phoneNumber.errors.maxlength">The phone number field must be 25 characters at most.</div>
+        </div>
+      </div>
+      <div class="form-group my-1">
+        <input placeholder="City" formControlName="city" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.city.errors }"/>
+        <div *ngIf="submitted && field.city.errors" class="invalid-feedback">
+          <div *ngIf="field.city.errors.maxlength">The city field must be 25 characters at most.</div>
+        </div>
+      </div>
+      <div class="form-group my-1">
+        <input placeholder="Province" formControlName="province" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.province.errors }"/>
+        <div *ngIf="submitted && field.province.errors" class="invalid-feedback">
+          <div *ngIf="field.province.errors.maxlength">The province field must be 25 characters at most.</div>
+        </div>
+      </div>
+      <div class="form-group my-1">
+        <input placeholder="Address" formControlName="address" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.address.errors }"/>
+        <div *ngIf="submitted && field.address.errors" class="invalid-feedback">
+          <div *ngIf="field.address.errors.maxlength">The address field must be 150 characters at most.</div>
+        </div>
+      </div>
+      <button class="btn btn-info btn-sm float-right ml-1" (click)="onSubmit(form)">Update</button>
+      <button class="btn btn-secondary btn-sm float-right" (click)="cancel()">Cancel</button>
+    </form>
+
+    <div *ngIf="isExpanded && authService.currentUser.email === user.email" (click)="openForm()" class="btn btn-info btn-sm btn-block">Edit</div>
+
+  </div>
+  <div class="col-8">deneme</div>
+</div>

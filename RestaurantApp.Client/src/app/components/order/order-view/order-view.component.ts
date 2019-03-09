@@ -7,6 +7,7 @@ import { OrderProduct } from 'src/app/_models/order-product';
 import { Product } from 'src/app/_models/product';
 import { ProductService } from 'src/app/_services/product.service';
 import { PaymentService } from 'src/app/_services/payment.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-order-view',
@@ -26,7 +27,8 @@ export class OrderViewComponent implements OnInit {
     private orderProductService: OrderProductService,
     private route: ActivatedRoute,
     private productService: ProductService,
-    private paymentService: PaymentService) { }
+    private paymentService: PaymentService,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -63,7 +65,7 @@ export class OrderViewComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert(err);
+        this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
   }
@@ -78,21 +80,23 @@ export class OrderViewComponent implements OnInit {
       },
       err => {
         console.log(err);
-        alert(err);
+        this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
   }
 
   confirmProduct(product: OrderProduct): void {
-    if (confirm('Are you sure you want to set this product as ready?')) {
+    if (confirm('Are you sure you want to update this product?')) {
       this.orderProductService.putOrderProduct(product).subscribe(
         res => {
-          product.isDone = !product.isDone;
+          if (product.isDone === false) { product.isDone = !product.isDone; }
+          else { product.isServed = !product.isServed }
           this.orderService.getOrderStatus(this.id).pipe(take(1)).subscribe(res => this.status = res);
+          this.toastr.success('You have updated this product successfully.', 'Successfully');
         },
         err => {
           console.log(err);
-          alert(err);
+          this.toastr.error('An error has been occurred during the process.', 'Error');
         }
       );
     }

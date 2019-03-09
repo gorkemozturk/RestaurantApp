@@ -2,17 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/_services/auth.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit {
-  title: string = 'LOGIN';
+  title: string = 'Login the Application';
   form: FormGroup;
   submitted: boolean = false;
   
-  constructor(private fb: FormBuilder, private service: AuthService, private router: Router) { }
+  constructor(private fb: FormBuilder, private service: AuthService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -36,14 +37,9 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/']);
       },
       err => {
-        console.log(err);
+        this.toastr.error('An error has been occurred during login process.', 'Error');
       }
     );
-  }
-
-  reset(form: NgForm) {
-    form.reset();
-    this.submitted = false;
   }
 
 }

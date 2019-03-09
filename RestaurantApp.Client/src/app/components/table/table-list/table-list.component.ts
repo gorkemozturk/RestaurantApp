@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Table } from 'src/app/_models/table';
 import { TableService } from 'src/app/_services/table.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-table-list',
@@ -12,7 +13,11 @@ export class TableListComponent implements OnInit {
   tables: Table[] = [];
   usage: boolean = false;
 
-  constructor(private service: TableService, private toastr: ToastrService) { }
+  page = 1;
+  pageSize = 5;
+  collectionSize = this.tables.length;
+
+  constructor(private service: TableService, private toastr: ToastrService, private authService: AuthService) { }
 
   ngOnInit() {
     this.service.getTables().subscribe(res => this.tables = res);
@@ -36,10 +41,14 @@ export class TableListComponent implements OnInit {
             },
             err => {
               console.log(err);
-              alert(err);
+              this.toastr.error('An error has been occurred during the process.', 'Error');
             }
           );
         }
+      },
+      err => {
+        console.log(err);
+        this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
   }

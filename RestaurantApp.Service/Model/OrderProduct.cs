@@ -13,6 +13,7 @@ namespace RestaurantApp.Service.Model
         public int ProductID { get; set; }
         public int Quantity { get; set; }
         public bool IsDone { get; set; }
+        public bool IsServed { get; set; }
 
         [ForeignKey("ProductID")]
         public virtual Product Product { get; set; }

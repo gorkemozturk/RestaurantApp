@@ -8,15 +8,15 @@
   </ol>
 </nav>
 
-<a routerLink="/orders" class="btn btn-outline-secondary btn-sm mb-3">
-  <i class="fas fa-chevron-left"></i> Back to List
+<a routerLink="/orders" class="btn btn-outline-secondary btn-sm py-2 px-5 mb-3">
+  <i class="fas fa-chevron-left"></i> Back
 </a>
 
-<form [formGroup]="form" autocomplete="off">
+<form [formGroup]="form" autocomplete="off" class="w-50">
   <div class="form-group row">
     <div class="col">
       <label>Order Name</label>
-      <input formControlName="orderName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.orderName.errors }"/>
+      <input formControlName="orderName" class="form-control" [ngClass]="{ 'is-invalid': submitted && field.orderName.errors }"/>
       <div *ngIf="submitted && field.orderName.errors" class="invalid-feedback">
         <div *ngIf="field.orderName.errors.required">The order name field is required.</div>
         <div *ngIf="field.orderName.errors.maxlength">The order name field must be 35 characters at most.</div>
@@ -25,7 +25,7 @@
     <div class="col">
       <label>Table</label>
       <select [attr.disabled]="id ? '' : null"
-        class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.tableID.errors }" (change)="setName($event.target)"
+        class="form-control" [ngClass]="{ 'is-invalid': submitted && field.tableID.errors }" (change)="setName($event.target)"
         formControlName="tableID">
         <option [value]="table.id" *ngFor="let table of tables">{{ table.tableName }}</option>
       </select>
@@ -34,6 +34,6 @@
       </div>
     </div>
   </div>
-  <button class="btn btn-info btn-sm px-5 float-right" (click)="onSubmit(form)">Submit</button>
-  <button class="btn btn-secondary btn-sm px-5 float-right mr-2" (click)="reset(form)">Reset</button>
+  <button class="btn btn-info btn-sm px-5 py-2 float-right" (click)="onSubmit(form)">Submit</button>
+  <button class="btn btn-secondary btn-sm px-5 py-2 float-right mr-2" (click)="reset(form)">Reset</button>
 </form>

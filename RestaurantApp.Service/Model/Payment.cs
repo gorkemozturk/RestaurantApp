@@ -14,6 +14,9 @@ namespace RestaurantApp.Service.Model
         public double Total { get; set; }
         public DateTime CreatedAt { get; set; }
 
+        [ForeignKey("OrderID")]
+        public virtual Order Order { get; set; }
+
         [ForeignKey("PaymentMethodID")]
         public virtual PaymentMethod PaymentMethod { get; set; }
     }

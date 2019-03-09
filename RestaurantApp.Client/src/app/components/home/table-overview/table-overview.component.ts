@@ -18,9 +18,9 @@ export class TableOverviewComponent implements OnInit {
   }
 
   setClass(table: Table) {
-    let cl = {
-      'bg-info text-white': !table.isAvailable
-    }
+    let cl = '';
+    if (table.isAvailable === false) { cl = 'bg-info text-white'; }
+    else { cl = 'bg-light text-muted'; }
 
     return cl;
   }
@@ -35,6 +35,15 @@ export class TableOverviewComponent implements OnInit {
     dialogConfig.data = { id };
 
     this.dialog.open(OrderOverviewComponent, dialogConfig);
+  }
+
+  get activeOrder () {
+    let sum = 0;
+    for (let table in this.tables) {
+      if (this.tables[table].isAvailable === false) { sum++; }
+    }
+
+    return sum;
   }
 
 }

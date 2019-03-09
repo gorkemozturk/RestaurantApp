@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/_models/product';
 import { ToastrService } from 'ngx-toastr';
 import { ProductService } from 'src/app/_services/product.service';
+import { AuthService } from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-product-list',
@@ -12,7 +13,11 @@ export class ProductListComponent implements OnInit {
   products: Product[] = [];
   usage: boolean = false;
 
-  constructor(private toastr: ToastrService, private service: ProductService) { }
+  page = 1;
+  pageSize = 5;
+  collectionSize = this.products.length;
+
+  constructor(private toastr: ToastrService, private service: ProductService, private authService: AuthService) { }
 
   ngOnInit() {
     this.service.getProducts().subscribe(res => this.products = res);
@@ -34,11 +39,15 @@ export class ProductListComponent implements OnInit {
               },
               err => {
                 console.log(err);
-                alert(err);
+                this.toastr.error('An error has been occurred during the process.', 'Error');
               }
             );
           }
         }
+      },
+      err => {
+        console.log(err);
+        this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
   }
