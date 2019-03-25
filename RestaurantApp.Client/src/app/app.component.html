@@ -1,14 +1,12 @@
-<app-header></app-header>
-  <div class="bg-white">
-    <div class="bg-white my-1 container-fluid">
-      <div class="bg-transparent row">
-        <div class="bg-transparent col-3 py-3">
-          <app-sidebar></app-sidebar>
-        </div>
-        <div style="border-left: medium solid #F8F8F8" class="bg-transparent col-9 py-3">
-          <router-outlet></router-outlet>
-        </div>
-      </div>
+<app-header *ngIf="authService.isAuthanticated"></app-header>
+<div class="container-fluid">
+  <div class="row">
+    <div class="bg-light" [class.col-xl-3]="authService.isAuthanticated" *ngIf="authService.isAuthanticated">
+      <app-sidebar></app-sidebar>
+    </div>
+    <div [ngClass]="{ 'col-xl-9 p-0': authService.isAuthanticated }" [class.col]="!authService.isAuthanticated">
+      <router-outlet></router-outlet>
     </div>
   </div>
-<app-footer></app-footer>
+</div>
+<app-footer *ngIf="authService.isAuthanticated"></app-footer>

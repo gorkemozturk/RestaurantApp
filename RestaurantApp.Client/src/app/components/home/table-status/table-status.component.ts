@@ -22,25 +22,18 @@ export class TableStatusComponent implements OnInit {
           else { unavaliable++; }
         }
 
-        Chart.defaults.global.defaultFontFamily = 'Montserrat';
+        Chart.defaults.global.defaultFontFamily = 'Roboto';
 
         this.chart = new Chart('table-status', {
-          type: 'pie',
+          type: 'doughnut',
           data: {
             datasets: [{
-              data: [
-                avaliable,
-                unavaliable
-              ],
-              backgroundColor: [
-                '#5BC0DE',
-                '#F0AD4E'
-              ],
+              data: [avaliable,unavaliable],
+              backgroundColor: ['rgb(66, 139, 202, 0.5)', 'rgb(217, 83, 79, 0.5)'],
+              borderColor: ['rgb(66, 139, 202)', 'rgb(217, 83, 79)'],
+              borderWidth: 1
             }],
-            labels: [
-              'Avaliable',
-              'Unavaliable'
-            ]
+            labels: ['Avaliable Table','Unavaliable Table']
           },
           options: {
             responsive: true
@@ -49,5 +42,4 @@ export class TableStatusComponent implements OnInit {
       }
     );
   }
-
 }

@@ -1,69 +1,30 @@
-<h4>{{ title | uppercase }}</h4>
+<div class="bg-white rounded-0 border-0 px-5 py-3">
+  <h4 class="m-0">{{ title | uppercase }}</h4>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent p-0 m-0 rounded-0 border-0">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+    </ol>
+  </nav>
+</div>
 
-<nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-transparent border-0 p-0">
-    <li class="breadcrumb-item active">Home</li>
-  </ol>
-</nav>
-
-<h6>{{ 'Statistics' | uppercase }}</h6>
-<div class="row">
-  <div class="col-4">
-    <div class="card bg-info text-white rounded-0">
-      <div class="card-body rounded-0 p-2 text-center">
-        <h4 class="m-0">{{ dailyGains | currency }}</h4>
-        Daily Gains
-      </div>
+<div class="p-5">
+  <div class="row">
+    <div class="col-lg-6 col-xl-4">
+      <h6 class="d-block bg-white shadow-sm rounded text-center mb-1 p-3">{{ 'Table Status' | uppercase }}</h6>
+      <app-table-status></app-table-status>
+      <div class="d-block d-lg-none pb-5"></div>
     </div>
-  </div>
-
-  <div class="col-4">
-    <div class="card bg-success text-white rounded-0">
-      <div class="card-body rounded-0 p-2 text-center">
-        <h4 class="m-0">{{ weeklyGains | currency }}</h4>
-        Weekly Gains
-      </div>
+    
+    <div class="col-lg-6 col-xl-4">
+      <h6 class="d-block bg-white shadow-sm rounded text-center mb-1 p-3">{{ 'Recent Payments' | uppercase }}</h6>
+      <app-recent-payment></app-recent-payment>
+      <div class="d-block d-lg-none pb-5"></div>
     </div>
-  </div>
 
-  <div class="col-4">
-    <div class="card bg-warning text-white rounded-0">
-      <div class="card-body rounded-0 p-2 text-center">
-        <h4 class="m-0">{{ monthlyGains | currency }}</h4>
-        Monthly Gains
-      </div>
+    <div class="col-lg-6 col-xl-4">
+      <h6 class="d-block bg-white shadow-sm rounded text-center mb-1 p-3">{{ 'Active Order Products' | uppercase }}</h6>
+      <app-recent-product></app-recent-product>
     </div>
-  </div>
-
-  <div class="w-100 my-3"></div>
-
-  <div class="col">
-      <h6>{{ 'Recent Products' | uppercase }}</h6>
-      <app-recent-order-product></app-recent-order-product>
-  </div>
-
-  <div class="col">
-    <h6>{{ 'Active Orders' | uppercase }}</h6>
-    <app-active-order></app-active-order> 
-  </div>
   
-  <div class="w-100 my-3"></div>
-
-  <div class="col">
-    <h6>{{ 'Table Overviews' | uppercase }}</h6>
-    <app-table-overview></app-table-overview>
   </div>
-
-  <div class="w-100 my-3"></div>
-
-  <div class="col-6">
-    <h6>{{ 'Table Status' | uppercase }}</h6>
-    <app-table-status></app-table-status>
-  </div>
-  
-  <div class="col-6">
-    <h6>{{ 'Recent Payments' | uppercase }}</h6>
-    <app-recent-payment></app-recent-payment>
-  </div>
-
 </div>

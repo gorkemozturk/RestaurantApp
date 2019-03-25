@@ -16,25 +16,31 @@ export class RecentPaymentComponent implements OnInit {
       res => {
         let dates = [];
         let incomes = [];
+
         for (let item in res) {
           let date = new Date(res[item].createdAt);
-          dates.push(date.getHours() + ':' + date.getMinutes());
+          dates.push(date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds());
           incomes.push(res[item].total.toFixed(2));
         }
-        Chart.defaults.global.defaultFontFamily = 'Montserrat';
+
+        Chart.defaults.global.defaultFontFamily = 'Roboto';
+
         this.chart = new Chart('weekly-income', {
-          type: 'line',
+          type: 'bar',
           data: {
             labels: dates,
             datasets: [
               {
                 data: incomes,
-                borderColor: '#5BC0DE',
-                label: 'Dollar',
+                backgroundColor: 'rgb(66, 139, 202, 0.5)',
+                borderColor: 'rgb(66, 139, 202)',
+                label: 'Payment',
+                borderWidth: 1
               }
             ]
           },
           options: {
+            responsive: true,
             legend: {
               display: false,
             },

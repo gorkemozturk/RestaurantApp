@@ -1,44 +1,61 @@
-<h4>[{{ title | uppercase }}]:  {{ order.orderName | uppercase }}</h4>
-
-<nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-white p-0">
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/orders">Orders</a></li>
-    <li class="breadcrumb-item"><a class="text-info" [routerLink]="['/order/' + order.id + '/view']">{{ order.orderName }}</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
-  </ol>
-</nav>
-
-<a [routerLink]="['/order/' + order.id + '/view']" class="btn btn-outline-secondary btn-sm mb-3 px-5 rounded-pill py-2">
-  <i class="fas fa-chevron-left"></i> Back
-</a>
-
-<div *ngIf="order.isPaid" class="alert alert-info rounded-0" role="alert" class="w-50">
-  This <strong>{{ order.orderName }}</strong> alread has been paid. You cannot complete this order again.
+<div class="bg-white px-5 py-3">
+  <h4><span style="font-weight: 900">{{ title | uppercase }}:</span> {{ order.orderName }}</h4>
+  <nav class="d-none d-sm-block" aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent p-0 m-0 rounded-0 border-0">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/orders">Orders</a></li>
+      <li class="breadcrumb-item"><a [routerLink]="['/order/' + order.id + '/view']">{{ order.orderName }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+    </ol>
+  </nav>
 </div>
 
-<div *ngIf="!status" class="alert alert-warning rounded-0" role="alert" class="w-50">
-  You cannot complete <strong>{{ order.orderName }}</strong>  since it's products are not ready. To complete this order, all product(s) which belongs to the order have to get ready.
-</div>
-
-<div *ngIf="!orderProducts.length" class="alert alert-warning rounded-0" role="alert" class="w-50">
-  You cannot complete <strong>{{ order.orderName }}</strong> since it is empty.
-</div>
-
-<form [formGroup]="form" autocomplete="off" class="w-50">
-  <div class="form-group">
-    <label>Payment Method</label>
-    <select
-      class="form-control"
-      [ngClass]="{ 'is-invalid': submitted && field.paymentMethodID.errors }"
-      [attr.disabled]="order.isPaid || !status || !orderProducts.length ? '' : null"
-      formControlName="paymentMethodID">
-      <option [value]="method.id" *ngFor="let method of methods">{{ method.name }}</option>
-    </select>
-    <div *ngIf="submitted && field.paymentMethodID.errors" class="invalid-feedback">
-      <div *ngIf="field.paymentMethodID.errors.required">The payment method field is required.</div>
-    </div>
+<div class="p-5">
+  <a [routerLink]="['/order/' + order.id + '/view']" class="btn btn-sm btn-outline-secondary rounded-pill px-5 mb-3">
+    Back
+  </a>
+  
+  <div *ngIf="order.isPaid" class="alert alert-warning" role="alert">
+    This <strong>{{ order.orderName }}</strong> alread has been paid. You cannot complete this order again.
   </div>
-  <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-info btn-sm px-5 py-2 rounded-pill float-right" (click)="onSubmit(form)">Complete Order for {{ order.total | currency }}</button>
-  <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-secondary btn-sm px-5 py-2 rounded-pill float-right mr-2" (click)="reset(form)">Reset</button>
-</form>
+  
+  <div *ngIf="!status" class="alert alert-warning" role="alert">
+    You cannot complete <strong>{{ order.orderName }}</strong>  since it's products are not ready. To complete this order, all product(s) which belongs to the order have to get ready.
+  </div>
+  
+  <div *ngIf="!orderProducts.length" class="alert alert-warning" role="alert">
+    You cannot complete <strong>{{ order.orderName }}</strong> since it has no any product(s).
+  </div>
+  
+  <div class="bg-white p-3 shadow-sm rounded">
+    <form [formGroup]="form" autocomplete="off">
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select
+          class="form-control rounded-pill"
+          [ngClass]="{ 'is-invalid': submitted && field.paymentMethodID.errors }"
+          [attr.disabled]="order.isPaid || !status || !orderProducts.length ? '' : null"
+          formControlName="paymentMethodID">
+          <option [value]="method.id" *ngFor="let method of methods">{{ method.name }}</option>
+        </select>
+        <div *ngIf="submitted && field.paymentMethodID.errors" class="invalid-feedback">
+          <div *ngIf="field.paymentMethodID.errors.required">The payment method field is required.</div>
+        </div>
+      </div>
+      
+      <div class="text-right d-none d-sm-block">
+        <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-sm btn-primary rounded-pill shadow-sm px-5 py-2 mr-1" (click)="onSubmit(form)">Complete Order for {{ order.total | currency }}</button>
+        <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-sm btn-secondary rounded-pill shadow-sm px-5 py-2" (click)="reset(form)">Reset</button>
+      </div>
+
+      <div class="text-right d-block d-sm-none">
+        <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-primary rounded-circle shadow-sm mr-1" (click)="onSubmit(form)">
+          <i class="far fa-save"></i>
+        </button>
+        <button [disabled]="order.isPaid || !status || !orderProducts.length" class="btn btn-secondary rounded-circle shadow-sm" (click)="reset(form)">
+          <i class="far fa-trash-alt"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

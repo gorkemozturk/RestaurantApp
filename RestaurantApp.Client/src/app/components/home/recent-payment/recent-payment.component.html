@@ -1,15 +1,6 @@
-<div class="card rounded-0">
-    <div class="card-body rounded-0" *ngIf="!chart">
-      <div class="alert alert-info m-0 rounded-0" role="alert">
-        There are no any resources to show here.
-      </div>
-    </div>
-    <div *ngIf="chart" class="card-body rounded-0 py-1 text-center">
-      <canvas id="weekly-income">{{ chart }}</canvas>
-    </div>
-    <div class="rounded-0 text-center text-uppercase text-muted card-footer">
-      <small>
-        Updated Recently
-      </small>
-    </div>
+<div class="bg-white rounded shadow-sm p-3">
+  <div *ngIf="!chart" class="alert alert-primary m-0 rounded-0" role="alert">
+    There are no any resources to show here.
   </div>
+  <canvas *ngIf="chart"  id="weekly-income">{{ chart }}</canvas>
+</div>

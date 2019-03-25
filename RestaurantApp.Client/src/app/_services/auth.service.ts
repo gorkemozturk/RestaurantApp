@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../_models/user';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +11,37 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  get isAuthanticated() {
-    return !!localStorage.getItem('token');
+  getToken(): string {
+    return localStorage.getItem('token');
+  }
+
+  getTokenExpirationDate(): Date {
+    const decoded = jwt_decode(this.getToken());
+
+    if (decoded.exp === undefined) return null;
+
+    const date = new Date(0); 
+    date.setUTCSeconds(decoded.exp);
+
+    return date;
+  }
+
+  get isTokenExpired(): boolean {
+    const date = this.getTokenExpirationDate();
+    if (date === undefined) return false;
+
+    return !!(date.valueOf() > new Date().valueOf());
+  }
+
+  get isAuthanticated(): boolean {
+    return !!(this.getToken() && this.isTokenExpired);
   }
 
   get currentUser() {
-    let token = localStorage.getItem('token');
+    let token = this.getToken();
     if(!token) return null;
 
-    return new JwtHelperService().decodeToken(token);
+    return jwt_decode(token);
   }
 
   register(user: User) {

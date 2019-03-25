@@ -317,11 +317,9 @@ namespace RestaurantApp.Service.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<string>("Address")
-                        .HasMaxLength(150);
+                    b.Property<string>("Address");
 
-                    b.Property<string>("City")
-                        .HasMaxLength(25);
+                    b.Property<string>("City");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -331,8 +329,9 @@ namespace RestaurantApp.Service.Migrations
                         .IsRequired()
                         .HasMaxLength(25);
 
-                    b.Property<string>("Province")
-                        .HasMaxLength(25);
+                    b.Property<string>("Province");
+
+                    b.Property<double>("Salary");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });

@@ -22,7 +22,7 @@ namespace RestaurantApp.Service.Controllers
             _context = context;
         }
 
-        [HttpGet("dailygains")]
+        [HttpGet("daily-gains")]
         public async Task<IActionResult> GetDailyGains()
         {
             var payments = await _context.Payments.Where(p => p.CreatedAt.Date == DateTime.Today.Date).ToListAsync();
@@ -34,7 +34,7 @@ namespace RestaurantApp.Service.Controllers
             return Ok(total);
         }
 
-        [HttpGet("weeklygains")]
+        [HttpGet("weekly-gains")]
         public async Task<IActionResult> GetWeeklyGains()
         {
             var payments = await _context.Payments.Where(p => p.CreatedAt.Date <= DateTime.Today.Date.AddDays(7)).ToListAsync();
@@ -46,7 +46,7 @@ namespace RestaurantApp.Service.Controllers
             return Ok(total);
         }
 
-        [HttpGet("monthlygains")]
+        [HttpGet("monthly-gains")]
         public async Task<IActionResult> GetMonthlyGains()
         {
             int days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);

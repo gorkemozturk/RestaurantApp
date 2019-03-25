@@ -15,8 +15,8 @@ export class OrderService {
     return this.http.get<any>(this.url).pipe(map(result => result));
   }
 
-  getACtiveOrders() {
-    return this.http.get<any>(this.url + 'active').pipe(map(result => result));
+  getActiveOrders() {
+    return this.http.get<any>(this.url + 'active');
   }
 
   getOrder(id: any) {

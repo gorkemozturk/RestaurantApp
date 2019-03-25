@@ -1,32 +1,22 @@
-<div class="py-3 bg-white">
-  <div class="container d-flex align-items-center justify-content-between">
-    <img style="width: 160px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/T%C3%BCrk_Telekom_logo.svg/1200px-T%C3%BCrk_Telekom_logo.svg.png">
+<div class="py-3 bg-primary">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
+    <img style="height: 64px" src="https://static-assets.filmfreeway.com/assets/filmfreeway-logo-hires-white-6247d694af985e41890115dfb676e2b3.png">
     
     <div class="d-flex align-items-center justify-content-between">
-      <div class="p-2 px-3 text-dark">
-        <i class="py-3 pr-3 mr-3 fas fa-mobile-alt border-dark border-right"></i>
+      <div class="p-2 px-3 text-white">
+        <i class="py-3 pr-3 mr-3 fas fa-mobile-alt border-white border-right"></i>
         <div class="float-right">
           <small>TELEFON</small> <br>
           <strong>0555 559 20 77</strong>
         </div>
       </div>
     
-      <div *ngIf="authService.isAuthanticated" class="ml-5 bg-info text-white rounded p-2 px-3">
-        <div class="float-left">
+      <div class="ml-5 border border-white text-white p-2 px-3">
+        <div style="cursor: pointer" (click)="openUserOverview(authService.currentUser.sub)" class="float-left">
           <small>WELCOME {{ authService.currentUser.typ | uppercase }}</small> <br>
           <strong>{{ authService.currentUser.given_name }}</strong>
         </div>
-        <i (click)="logout()" style="cursor: pointer;" class="py-3 pl-3 ml-3 fas fa-power-off border-white border-left"></i>
-      </div>
-
-      <div *ngIf="!authService.isAuthanticated" class="ml-5 bg-info text-white p-2 px-3">
-        <div class="float-left">
-          <small>WELCOME</small> <br>
-          <a routerLink="/login" class="text-white font-weight-bold">Login</a>
-          <small class="mx-2">OR</small>
-          <a routerLink="/register" class="text-white font-weight-bold">Register</a>
-        </div>
-        <i class="py-3 pl-3 ml-3 far fa-user border-white border-left"></i>
+        <i (click)="logout()" style="cursor: pointer;" class="py-3 pl-3 ml-3 fas fa-times-circle border-white border-left"></i>
       </div>
     </div>
   </div>

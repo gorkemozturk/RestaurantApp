@@ -1,26 +1,41 @@
-<h4>{{ title | uppercase }}</h4>
+<div class="bg-white px-5 py-3">
+  <h4 class="m-0">{{ title | uppercase }}</h4>
+  <nav class="d-none d-sm-block" aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent p-0 m-0 rounded-0 border-0">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/payment-methods">Payment Methods</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+    </ol>
+  </nav>
+</div>
 
-<nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-white p-0">
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/payment-methods">Payment Methods</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
-  </ol>
-</nav>
+<div class="p-5">
+  <a routerLink="/payment-methods" class="btn btn-sm btn-outline-secondary rounded-pill px-5 mb-3">
+    Back
+  </a>
+  <div class="bg-white p-3 shadow-sm rounded">
+    <form [formGroup]="form" autocomplete="off">
+      <div class="form-group">
+        <label>Payment Method Name</label>
+        <input formControlName="name" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.name.errors }"/>
+        <div *ngIf="submitted && field.name.errors" class="invalid-feedback">
+          <div *ngIf="field.name.errors.required">The payment method name field is required.</div>
+          <div *ngIf="field.name.errors.maxlength">The payment method name field must be 45 characters at most.</div>
+        </div>
+      </div>
+      <div class="text-right d-none d-sm-block">
+        <button class="btn btn-sm btn-primary rounded-pill shadow-sm px-5 py-2 mr-1" (click)="onSubmit(form)">{{ !id ? 'Create' : 'Update' }}</button>
+        <button class="btn btn-sm btn-secondary rounded-pill shadow-sm px-5 py-2" (click)="reset(form)">Reset</button>
+      </div>
 
-<a routerLink="/payment-methods" class="btn btn-outline-secondary btn-sm mb-3 px-5 py-2">
-  <i class="fas fa-chevron-left"></i> Back
-</a>
-
-<form [formGroup]="form" autocomplete="off" class="w-50">
-  <div class="form-group">
-    <label>Payment Method Name</label>
-    <input formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && field.name.errors }"/>
-    <div *ngIf="submitted && field.name.errors" class="invalid-feedback">
-      <div *ngIf="field.name.errors.required">The payment method name field is required.</div>
-      <div *ngIf="field.name.errors.maxlength">The payment method name field must be 45 characters at most.</div>
-    </div>
+      <div class="text-right d-block d-sm-none">
+        <button class="btn btn-primary rounded-circle shadow-sm mr-1" (click)="onSubmit(form)">
+          <i class="far fa-save"></i>
+        </button>
+        <button class="btn btn-secondary rounded-circle shadow-sm" (click)="reset(form)">
+          <i class="far fa-trash-alt"></i>
+        </button>
+      </div>
+    </form>
   </div>
-  <button class="btn btn-info btn-sm px-5 py-2 float-right" (click)="onSubmit(form)">Submit</button>
-  <button class="btn btn-secondary btn-sm px-5 py-2 mr-2 float-right" (click)="reset(form)">Reset</button>
-</form>
+</div>

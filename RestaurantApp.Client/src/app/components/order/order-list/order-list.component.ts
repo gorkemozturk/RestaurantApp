@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/_services/auth.service';
 export class OrderListComponent implements OnInit {
   title: string = 'Orders';
   orders: Order[] = [];
+  keyword: string = '';
 
   page = 1;
   pageSize = 5;
@@ -22,7 +23,9 @@ export class OrderListComponent implements OnInit {
     this.service.getOrders().subscribe(res => this.orders = res);
   }
 
-  onDelete(order: Order): void {
+  onDelete(order: Order, event: any): void {
+    event.stopPropagation();
+
     if (confirm('Are you sure you want to delete ' + order.orderName + '?')) {
       this.service.deleteOrder(order).subscribe(
         res => {

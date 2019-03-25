@@ -1,3 +1,50 @@
-<p>
-  kitchen works!
-</p>
+<div class="bg-white rounded-0 border-0 px-5 py-3">
+  <h4 class="m-0">{{ title | uppercase }}</h4>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent p-0 m-0 rounded-0 border-0">
+      <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+    </ol>
+  </nav>
+</div>
+
+<div class="p-5">
+  <div *ngIf="!products.length" class="row">
+    <div class="col">
+      <div class="alert alert-primary m-0 w-25 mx-auto text-center" role="alert">
+        <i style="font-size: 200%" class="fas fa-info-circle d-block mb-1"></i>
+        There are no any products to show here.
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="products.length"  class="row px-2">
+    <div class="col-md-12 col-lg-6 col-xl-4 pt-0 pr-2 pb-2 pl-2" *ngFor="let product of products | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+      <div class="p-3 rounded shadow-sm" [ngClass]="{ 'bg-success text-white': product.isDone, 'bg-white': !product.isDone }">
+        <div class="row d-flex align-items-center">
+          <div class="col-sm-6">
+            <small class="text-uppercase font-weight-bold d-block">Product</small>
+            {{ product.product.productName }} x {{ product.quantity }}
+          </div>
+          <div class="col-sm-3">
+            <small class="text-uppercase font-weight-bold d-block">Table</small>
+            {{ product.order.table.tableName }}
+          </div>
+          <div class="col-sm-3 text-right">
+            <div (click)="confirmProduct(product)" *ngIf="!product.isDone" class="btn btn-sm btn-outline-success rounded-circle">
+              <i class="fas fa-check"></i>
+            </div>
+            <div *ngIf="product.isDone"><i class="fas fa-check"></i> Ready</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="products.length" class="text-muted mt-2">
+    <div class="row d-flex align-items-center">
+      <div class="col d-none d-sm-block"><small>TOTAL PRODUCTS: {{ products.length }}</small></div>
+      <div class="col d-flex flex-row-reverse"><ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="products.length"></ngb-pagination></div>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,14 @@ namespace RestaurantApp.Service.Model.ViewModels
     {
         public string Id { get; set; }
 
+        [MaxLength(50)]
+        public string FirstName { get; set; }
+
+        [MaxLength(25)]
+        public string LastName { get; set; }
+
+        public double Salary { get; set; }
+
         [MaxLength(25)]
         public string PhoneNumber { get; set; }
 

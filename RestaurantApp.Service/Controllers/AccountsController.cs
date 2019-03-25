@@ -48,13 +48,9 @@ namespace RestaurantApp.Service.Controllers
                 return BadRequest(result.Errors);
             else
             {
-                if (users == 0)
-                    await userManager.AddToRoleAsync(user, "Officer");
-                else
-                    await userManager.AddToRoleAsync(user, "User");
+                await userManager.AddToRoleAsync(user, "Officer");
+                await signInManager.SignInAsync(user, isPersistent: false);
             }
-
-            await signInManager.SignInAsync(user, isPersistent: false);
 
             return Ok(user);
         }
@@ -85,7 +81,7 @@ namespace RestaurantApp.Service.Controllers
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is a scret phrase."));
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-            var jwt = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claims);
+            var jwt = new JwtSecurityToken(signingCredentials: signingCredentials, claims: claims, expires: DateTime.UtcNow.AddMinutes(60));
 
             return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
         }

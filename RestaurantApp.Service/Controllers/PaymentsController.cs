@@ -27,7 +27,7 @@ namespace RestaurantApp.Service.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Payment>>> GetPayments()
         {
-            return await _context.Payments.Include(p => p.Order).Include(p => p.PaymentMethod).OrderByDescending(o => o.CreatedAt).ToListAsync();
+            return await _context.Payments.Include(p => p.Order).ThenInclude(o => o.Table).Include(p => p.PaymentMethod).OrderByDescending(o => o.CreatedAt).ToListAsync();
         }
 
         [HttpGet("recent")]

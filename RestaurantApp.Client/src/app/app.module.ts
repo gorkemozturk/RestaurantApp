@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Route } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 
@@ -13,8 +13,6 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
-import { RegisterComponent } from './components/register/register.component';
-import { LoginComponent } from './components/login/login.component';
 import { AuthService } from './_services/auth.service';
 import { AuthInterceptor } from './_helpers/auth.interceptor';
 import { TableService } from './_services/table.service';
@@ -37,26 +35,31 @@ import { SummaryPipe } from './_helpers/summary.pipe';
 import { OrderFormComponent } from './components/order/order-form/order-form.component';
 import { OrderViewComponent } from './components/order/order-view/order-view.component';
 import { OrderCompleteComponent } from './components/order/order-complete/order-complete.component';
-import { ActiveOrderComponent } from './components/home/active-order/active-order.component';
-import { TableOverviewComponent } from './components/home/table-overview/table-overview.component';
-import { RecentOrderProductComponent } from './components/home/recent-order-product/recent-order-product.component';
-import { OrderOverviewComponent } from './components/home/order-overview/order-overview.component';
 import { LoginGuard } from './_guards/login.guard';
 import { PaymentComponent } from './components/payment/payment.component';
 import { UserService } from './_services/user.service';
 import { TableStatusComponent } from './components/home/table-status/table-status.component';
 import { RecentPaymentComponent } from './components/home/recent-payment/recent-payment.component';
 import { UserListComponent } from './components/user/user-list/user-list.component';
-import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
 import { OrderProductStatusComponent } from './components/order-product-status/order-product-status.component';
 import { KitchenComponent } from './components/kitchen/kitchen.component';
+import { OrderOverviewComponent } from './components/order-overview/order-overview.component';
+import { ServiceComponent } from './components/service/service.component';
+import { RecentProductComponent } from './components/home/recent-product/recent-product.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { UserCreateComponent } from './components/user/user-create/user-create.component';
+import { UserOverviewComponent } from './components/user-overview/user-overview.component';
+import { OrderPipe } from './_helpers/order.pipe';
+import { ProductPipe } from './_helpers/product.pipe';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const routes: Route[] = [
   { path: '', component: HomeComponent, canActivate: [ AuthGuard ] },
 
   // Authantications routes.
-  { path: 'register', component: RegisterComponent, canActivate: [ LoginGuard ] },
   { path: 'login', component: LoginComponent, canActivate: [ LoginGuard ] },
+  { path: 'register', component: RegisterComponent, canActivate: [ LoginGuard ] },
 
   // Table components routes.
   { path: 'tables', component: TableListComponent, canActivate: [ AuthGuard ] },
@@ -82,9 +85,18 @@ const routes: Route[] = [
   // Payment component route.
   { path: 'payments', component: PaymentComponent, canActivate: [ AuthGuard ] },
 
-  // User component routes.
+  // Kitchen component route.
+  { path: 'kitchen', component: KitchenComponent, canActivate: [ AuthGuard ] },
+
+  // Service component route.
+  { path: 'services', component: ServiceComponent, canActivate: [ AuthGuard ] },
+
+  // User components routes.
   { path: 'users', component: UserListComponent, canActivate: [ AuthGuard ] },
-  { path: 'user/:id/profile', component: UserProfileComponent, canActivate: [ AuthGuard ] }
+  { path: 'user/new', component: UserCreateComponent, canActivate: [ AuthGuard ] },
+
+  // 404 Not Found Component.
+  { path: '**', component: NotFoundComponent, canActivate: [ AuthGuard ] }
 ]
 
 @NgModule({
@@ -93,8 +105,6 @@ const routes: Route[] = [
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    RegisterComponent,
-    LoginComponent,
     SidebarComponent,
     TableListComponent,
     TableFormComponent,
@@ -107,23 +117,29 @@ const routes: Route[] = [
     OrderFormComponent,
     OrderViewComponent,
     OrderCompleteComponent,
-    ActiveOrderComponent,
-    TableOverviewComponent,
-    RecentOrderProductComponent,
-    OrderOverviewComponent,
     PaymentComponent,
     TableStatusComponent,
     RecentPaymentComponent,
     UserListComponent,
-    UserProfileComponent,
     OrderProductStatusComponent,
-    KitchenComponent
+    KitchenComponent,
+    OrderOverviewComponent,
+    ServiceComponent,
+    RecentProductComponent,
+    LoginComponent,
+    RegisterComponent,
+    UserCreateComponent,
+    UserOverviewComponent,
+    OrderPipe,
+    ProductPipe,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(routes),
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
     ToastrModule.forRoot(),
@@ -146,7 +162,8 @@ const routes: Route[] = [
     }
   ],
   entryComponents: [
-    OrderOverviewComponent
+    OrderOverviewComponent,
+    UserOverviewComponent
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,6 @@
+<div class="bg-white shadow-sm rounded p-3">
+  <div *ngIf="!chart" class="alert alert-primary m-0 rounded-0" role="alert">
+    There are no any resources to show here.
+  </div>
+  <canvas *ngIf="chart" id="recent-product">{{ chart }}</canvas>
+</div>

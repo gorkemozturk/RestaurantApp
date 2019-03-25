@@ -96,7 +96,7 @@ namespace RestaurantApp.Service.Controllers
 
             if (order == null)
             {
-                return NoContent();
+                return NotFound();
             }
 
             return order;

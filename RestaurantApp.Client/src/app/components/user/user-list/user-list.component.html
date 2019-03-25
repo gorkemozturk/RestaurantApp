@@ -1,46 +1,80 @@
-<h4>{{ title | uppercase }}</h4>
-
-<nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-white border-0 bg-transparent p-0">
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
-  </ol>
-</nav>
-
-<div class="card rounded rounded-0">
-  <div class="card-body rounded-0" *ngIf="!users.length">
-    <div class="alert alert-info m-0 rounded-0" role="alert">
-      There are no any resources to show here.
+<div class="bg-white px-5 py-3">
+  <div class="row d-flex align-items-center">
+    <div class="col">
+      <h4 class="m-0">{{ title | uppercase }}</h4>
+      <nav class="d-none d-sm-block" aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent p-0 m-0 rounded-0 border-0">
+          <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="col text-right d-block d-lg-none">
+      <a routerLink="/user/new" class="btn btn-primary rounded-circle shadow-sm">
+        <i class="fas fa-plus"></i>
+      </a>
+    </div>
+    <div class="col text-right d-none d-lg-block">
+      <a routerLink="/user/new" class="btn btn-sm btn-primary rounded-pill px-5 py-2 shadow-sm">
+        Create a New User
+      </a>
     </div>
   </div>
-  <div class="card-body rounded-0 p-0" *ngIf="users.length">
-    <table class="table m-0">
-      <thead>
-        <tr>
-          <th class="border-0" scope="col">#</th>
-          <th class="border-0" scope="col">FULL NAME</th>
-          <th class="border-0" scope="col">E-MAIL</th>
-          <th class="border-0" scope="col">PHONE</th>
-          <th class="border-0" scope="col">LOCATION</th>
-          <th class="border-0"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr [class.table-info]="authService.currentUser.email === user.email" *ngFor="let user of users | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
-          <td>{{ i+1 }}</td>
-          <td class="align-middle"><a class="font-weight-bold text-info" [routerLink]="['/user/' + user.id + '/profile']">{{ user.firstName }} {{ user.lastName }}</a></td>
-          <td class="align-middle">{{ user.email }}</td>
-          <td class="align-middle">{{ user.phoneNumber ? user.phoneNumber : 'Unknown' }}</td>
-          <td class="align-middle">{{ user.province ? user.province : 'Unknown' }}, {{ user.city ? user.city : 'Unknown' }}</td>
-          <td class="text-right">
-            <i *ngIf="authService.currentUser.email != user.email && authService.currentUser.typ == 'Officer'" style="cursor: pointer" (click)="onDelete(table)" class="text-danger far fa-times-circle"></i>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+</div>
+
+<div class="p-5">
+  <div *ngIf="!users.length" class="alert alert-primary m-0 text-center" role="alert">
+    <i style="font-size: 200%" class="fas fa-info-circle d-block mb-1"></i>
+    There are no any users to show here.
   </div>
-  <div class="card-footer rounded-0 text-center text-muted d-flex align-items-center justify-content-between">
-    <small>TOTAL USERS: {{ users.length }}</small>
-    <ngb-pagination size="sm" [(page)]="page" [pageSize]="pageSize" [collectionSize]="users.length"></ngb-pagination>
+
+  <div *ngIf="users.length" class="row px-2">
+    <div class="col-md-6 pt-0 pr-2 pb-2 pl-2" *ngFor="let user of users | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
+      <div class="rounded shadow-sm p-3" 
+        [ngClass]="{ 'text-white bg-primary': authService.currentUser.email === user.email, 'text-dark bg-white': authService.currentUser.email !== user.email }">
+        <div class="row d-flex align-items-center">
+          <div class="col-sm">
+            <small class="text-uppercase font-weight-bold d-block">Full Name</small>
+            <span *ngIf="!user.lockoutEnd">{{ user.firstName }} {{ user.lastName }}</span>
+            <del [hidden]="user.lockoutEnd === null">{{ user.firstName }} {{ user.lastName }}</del>
+          </div>
+          <div class="col-sm d-none d-lg-block">
+            <small class="text-uppercase font-weight-bold d-block">E-Mail</small>
+            {{ user.email }}
+          </div>
+          <div class="col-sm">
+            <div *ngIf="user.lockoutEnd">
+              <small class="text-uppercase font-weight-bold d-block">Status</small>
+              <i class="text-danger fas fa-circle"></i> Passive
+            </div>
+            <div *ngIf="!user.lockoutEnd">
+              <small class="text-uppercase font-weight-bold d-block">Status</small>
+              <i class="text-success fas fa-circle"></i> Active
+            </div>
+          </div>
+          <div class="col-sm text-right">
+            <div class="btn btn-sm rounded-circle" 
+              (click)="openUserOverview(user.id)"
+              [ngClass]="{ 'btn-light': authService.currentUser.email === user.email, 'btn-outline-primary': authService.currentUser.email !== user.email }">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <button class="btn btn-sm btn-outline-danger rounded-circle ml-1" (click)="lockoutUser(user)" *ngIf="authService.currentUser.typ == 'Officer' && authService.currentUser.email != user.email && !user.lockoutEnd">
+              <i class="fas fa-ban"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-success rounded-circle ml-1" (click)="unlockUser(user)" *ngIf="authService.currentUser.typ == 'Officer' && authService.currentUser.email != user.email && user.lockoutEnd">
+              <i class="fas fa-undo-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div *ngIf="users.length" class="text-muted mt-2">
+    <div class="row d-flex align-items-center">
+      <div class="col d-none d-sm-block"><small>TOTAL USERS: {{ users.length }}</small></div>
+      <div class="col d-flex flex-row-reverse"><ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="users.length"></ngb-pagination></div>
+    </div>
+  </div>
+
 </div>

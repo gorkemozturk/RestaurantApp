@@ -21,6 +21,7 @@ export class OrderViewComponent implements OnInit {
   payment: any = {};
   total: number = 0;
   status: boolean = false;
+  keyword: string = '';
 
   constructor(
     private orderService: OrderService, 
@@ -71,6 +72,12 @@ export class OrderViewComponent implements OnInit {
   }
 
   onDelete(product: OrderProduct): void {
+    if (product.isServed === true) { 
+      this.toastr.warning('You cannot delete this product since it is already served.' , 'Warning')
+      return;
+
+    }
+
     this.orderProductService.deleteOrderProduct(product).subscribe(
       res => {
         const index = this.orderProducts.indexOf(product);
@@ -83,23 +90,6 @@ export class OrderViewComponent implements OnInit {
         this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
-  }
-
-  confirmProduct(product: OrderProduct): void {
-    if (confirm('Are you sure you want to update this product?')) {
-      this.orderProductService.putOrderProduct(product).subscribe(
-        res => {
-          if (product.isDone === false) { product.isDone = !product.isDone; }
-          else { product.isServed = !product.isServed }
-          this.orderService.getOrderStatus(this.id).pipe(take(1)).subscribe(res => this.status = res);
-          this.toastr.success('You have updated this product successfully.', 'Successfully');
-        },
-        err => {
-          console.log(err);
-          this.toastr.error('An error has been occurred during the process.', 'Error');
-        }
-      );
-    }
   }
 
   get sumProduct () {

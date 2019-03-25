@@ -1,57 +1,64 @@
-<h4>{{ title | uppercase }}</h4>
-
-<nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-white border-0 bg-transparent p-0">
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Tables</li>
-  </ol>
-</nav>
-
-<a routerLink="/table/new" class="btn btn-sm btn-info float-right mb-3 px-5 py-2">Create a New Table</a>
-
-<div class="clearfix"></div>
-
-<div class="card rounded rounded-0">
-  <div class="card-body rounded-0" *ngIf="!tables.length">
-    <div class="alert alert-info m-0 rounded-0" role="alert">
-      There are no any resources to show here.
+<div class="bg-white px-5 py-3">
+  <div class="row d-flex align-items-center">
+    <div class="col">
+      <h4 class="m-0">{{ title | uppercase }}</h4>
+      <nav class="d-none d-sm-block" aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent p-0 m-0 rounded-0 border-0">
+          <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="col text-right d-block d-lg-none">
+      <a routerLink="/table/new" class="btn btn-primary rounded-circle shadow-sm">
+        <i class="fas fa-plus"></i>
+      </a>
+    </div>
+    <div class="col text-right d-none d-lg-block">
+      <a routerLink="/table/new" class="btn btn-sm btn-primary rounded-pill px-5 py-2 shadow-sm">
+        Create a New Table
+      </a>
     </div>
   </div>
-  <div class="card-body rounded-0 p-0" *ngIf="tables.length">
-    <table class="table m-0">
-      <thead>
-        <tr>
-          <th class="border-0" scope="col">#</th>
-          <th class="border-0" scope="col">TABLE NAME</th>
-          <th scope="col" class="border-0 text-center">STATUS</th>
-          <th class="border-0"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let table of tables | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; let i = index">
-          <td>{{ i+1 }}</td>
-          <td class="align-middle">{{ table.tableName }}</td>
-          <td class="align-middle text-center">
-            <i *ngIf="table.isAvailable" class="text-success fas fa-check-circle mr-1"></i>
-            <small *ngIf="table.isAvailable" class="font-weight-bold text-success">AVALIABLE</small>
+</div>
 
-            <i *ngIf="!table.isAvailable" class="text-warning fas fa-exclamation-circle mr-1"></i>
-            <small *ngIf="!table.isAvailable" class="text-warning font-weight-bold">UNAVALIABLE</small>
-          </td>
-          <td class="text-right">
-            <a [routerLink]="['/table/' + table.id + '/edit']" class="btn btn-outline-info btn-sm px-3">
-              <i class="far fa-edit"></i> Edit
-            </a>
-            <button class="btn btn-outline-danger btn-sm px-3 ml-2" (click)="onDelete(table)" *ngIf="authService.currentUser.typ == 'Officer'">
-              <i class="far fa-trash-alt"></i> Delete
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="p-5">
+  <div *ngIf="!tables.length" class="alert alert-primary m-0 text-center" role="alert">
+    <i style="font-size: 200%" class="fas fa-info-circle d-block mb-1"></i>
+    There are no any tables to show here.
   </div>
-  <div class="card-footer rounded-0 text-center text-muted d-flex align-items-center justify-content-between">
-    <small>TOTAL TABLES: {{ tables.length }}</small>
-    <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="tables.length"></ngb-pagination>
+  
+  <div *ngIf="tables.length" class="row px-2">
+    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 pt-0 pr-2 pb-2 pl-2" *ngFor="let table of tables | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+      <div [ngClass]="setClass(table)" class=" d-flex justify-content-between align-items-center rounded shadow-sm p-3">
+        <div>
+          <small class="font-weight-bold text-uppercase">Table Name</small> <br>
+          {{ table.tableName }}
+        </div>
+        <div>
+          <a class="btn btn-sm btn-outline-info rounded-circle" *ngIf="table.isAvailable" [routerLink]="['/order/new']" [queryParams]="{ table: table.id }">
+            <i class="fas fa-concierge-bell"></i>
+          </a>
+          <div class="btn btn-sm btn-light rounded-circle" *ngIf="!table.isAvailable" (click)="openOrderOverview(table.id)">
+            <i class="fas fa-eye"></i>
+          </div>
+  
+          <a [routerLink]="['/table/' + table.id + '/edit']" class="btn btn-sm rounded-circle mx-1" [class.btn-outline-primary]="table.isAvailable" [class.btn-light]="!table.isAvailable">
+            <i class="fas fa-sync-alt"></i>
+          </a>
+          <div class="btn btn-sm rounded-circle" [class.btn-outline-danger]="table.isAvailable" [class.btn-light]="!table.isAvailable" (click)="onDelete(table)">
+            <i class="fas fa-eraser"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+  <div *ngIf="tables.length" class="text-muted mt-2">
+    <div class="row d-flex align-items-center">
+      <div class="col d-none d-sm-block"><small>TOTAL TABLES: {{ tables.length }}</small></div>
+      <div class="col d-flex flex-row-reverse"><ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="tables.length"></ngb-pagination></div>
+    </div>
   </div>
 </div>
+

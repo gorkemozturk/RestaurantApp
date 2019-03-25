@@ -11,14 +11,14 @@ export class StatisticsService {
   constructor(private http: HttpClient) { }
 
   getDailyGains() {
-    return this.http.get<any>(this.url + 'dailygains').pipe(map(result => result));
+    return this.http.get<any>(this.url + 'daily-gains').pipe(map(result => result));
   }
 
   getWeeklyGains() {
-    return this.http.get<any>(this.url + 'weeklygains').pipe(map(result => result));
+    return this.http.get<any>(this.url + 'weekly-gains').pipe(map(result => result));
   }
 
   getMonthlyGains() {
-    return this.http.get<any>(this.url + 'monthlygains').pipe(map(result => result));
+    return this.http.get<any>(this.url + 'monthly-gains').pipe(map(result => result));
   }
 }

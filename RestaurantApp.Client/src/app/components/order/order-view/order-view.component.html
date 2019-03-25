@@ -1,128 +1,107 @@
-<h4>[{{ order.table?.tableName }}]: {{ order.orderName | uppercase }}</h4>
-
-<nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-white p-0">
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/orders">Orders</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ order.orderName }}</li>
-  </ol>
-</nav>
-
-<div class="row mb-3">
-  <div class="col">
-    <a routerLink="/orders" class="btn btn-sm btn-outline-secondary py-2 px-5">
-      <i class="fas fa-chevron-left"></i> Back
-    </a>
-  </div>
-  
-  <div class="col text-right">
-    <a [class.disabled]="!orderProducts.length" [routerLink]="['/order/' + order.id + '/complete']" class="btn btn-secondary btn-sm py-2 px-5">
-      Print the Order
-    </a>
-  
-    <a *ngIf="!order.isPaid" [class.disabled]="!status || !orderProducts.length" [routerLink]="['/order/' + order.id + '/complete']" class="btn btn-info btn-sm py-2 px-5 ml-2">
-      Complete This Order <span class="font-weight-bold" *ngIf="orderProducts.length">for {{ total | currency }}</span>
-    </a>
+<div class="bg-white px-5 py-3">
+  <div class="row d-flex align-items-center">
+    <div class="col-8">
+      <h4 class="m-0 d-none d-sm-block"><span style="font-weight: 900">{{ order.table?.tableName | uppercase }}:</span> {{ order.orderName }}</h4>
+      <h4 class="m-0 d-block d-sm-none">{{ order.table?.tableName | uppercase }}</h4>
+      <nav class="d-none d-sm-block" aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent p-0 m-0 rounded-0 border-0">
+          <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
+          <li class="breadcrumb-item"><a routerLink="/orders">Orders</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ order.orderName | summary:25 }}</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="col-4 text-right">
+      <a *ngIf="!order.isPaid" [class.disabled]="!status || !orderProducts.length" [routerLink]="['/order/' + order.id + '/complete']" class="btn btn-primary rounded-circle ml-1 shadow-sm">
+        <i class="fas fa-wallet"></i>
+      </a>
+    </div>
   </div>
 </div>
 
-<div class="row">
-  <div class="col">
-    <div *ngIf="!status" class="alert alert-warning rounded-0" role="alert">
-      You cannot complete <strong>{{ order.orderName }}</strong> since it's products are not served. To complete this order, all product(s) which belongs to the order have to serve.
+<div class="p-5">
+  <a routerLink="/orders" class="btn btn-sm btn-outline-secondary rounded-pill px-5 mb-5">
+    Back
+  </a>
+
+  <div *ngIf="!status" class="alert alert-warning rounded text-center" role="alert">
+    <i style="font-size: 200%" class="fas fa-exclamation-triangle d-block mb-1"></i>
+    You cannot complete <strong>{{ order.orderName }}</strong> since it's products are not served. To complete this order, all product(s) which belongs to the order have to serve.
+  </div>
+
+  <h6 class="mb-3" style="font-weight: 900">{{ 'Products in the Order' | uppercase }}</h6>
+  <div *ngIf="!orderProducts.length"  class="alert alert-primary text-center mb-3" role="alert">
+    <i style="font-size: 200%" class="fas fa-info-circle d-block mb-1"></i>
+    There are no any resources to show here.
+  </div>
+
+  <div *ngIf="orderProducts.length" class="row px-2">
+    <div class="col-md-23 col-lg-4 pt-0 pr-2 pb-2 pl-2" *ngFor="let product of orderProducts">
+      <div (click)="onDelete(product)" class="bg-white rounded shadow-sm p-3">
+        <div class="row d-flex align-items-center">
+          <div class="col-sm-1">
+            <i class="text-danger far fa-trash-alt"></i>
+          </div>
+          <div class="col-sm-8">
+            <small class="text-uppercase font-weight-bold d-block">Product</small>
+            {{ product.product.productName }} x {{ product.quantity }} ({{ (product.product.price + (product.product.price * product.product.tax / 100)) * product.quantity | currency }})
+            <div class="d-block d-md-none pb-2"></div>
+          </div>
+          <div class="col-sm-3">
+            <small class="text-uppercase font-weight-bold d-block">Status</small>
+            <app-order-product-status [product]="product"></app-order-product-status>
+            <div class="d-block d-md-none pb-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-100"></div>
+
+    <div class="col text-right px-2">
+      <div class="d-inline-block bg-primary text-white px-3 py-1 mt-2 rounded">
+        <small class="text-uppercase font-weight-bold d-block">Total</small>
+        <h4 style="font-weight: 900" class="m-0">{{ total | currency }}</h4>
+      </div>
     </div>
   </div>
 
-  <div class="w-100"></div>
+  <div *ngIf="!products.length" class="alert alert-primary text-center" role="alert">
+    <i style="font-size: 200%" class="fas fa-info-circle d-block mb-1"></i>
+    There are no any resources to show here.
+  </div>
 
-  <div class="col">
-    <div class="card rounded-0">
-      <div *ngIf="!orderProducts.length" class="card-body rounded-0">
-        <div class="alert alert-info m-0 rounded-0" role="alert">
-          There are no any resources to show here.
-        </div>
+  <div *ngIf="order.isPaid" class="alert alert-success text-center m-0" role="alert">
+    This order has been paid on <strong>{{ payment.createdAt | date }}</strong> for <strong>{{ payment.total | currency }}</strong> as <strong>{{ payment.paymentMethod?.name }}</strong>.
+  </div>
+
+  <div *ngIf="!order.isPaid">
+    <div class="row d-flex align-items-end mb-3">
+      <div class="col-md">
+        <h6 style="font-weight: 900" class="m-0">{{ 'Add Products' | uppercase }}</h6>
       </div>
-      <div *ngIf="orderProducts.length" class="card-body rounded-0 p-0">
-        <table class="table m-0">
-          <thead>
-            <tr>
-              <th class="border-0" scope="col">TOTAL PRODUCTS IN CURRENT ORDER</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let product of orderProducts; let i = index">
-              <td class="d-flex justify-content-between align-items-center">
-                <div>
-                  {{ i+1 }}.
-                  {{ product.product.productName }} x {{ product.quantity }}
-                  <app-order-product-status [product]="product"></app-order-product-status>
-                </div>
-                
-                <div>
-                  {{ (product.product.price + (product.product.price * product.product.tax / 100)) * product.quantity | currency }}
-                  
-                  <button (click)="confirmProduct(product)" *ngIf="!product.isDone && !product.isServed" class="btn btn-sm btn-outline-success px-3 ml-2">
-                    <i class="fas fa-check"></i> Ready
-                  </button>
-                  <button (click)="confirmProduct(product)" *ngIf="product.isDone && !product.isServed" class="btn btn-sm btn-outline-info px-3 ml-2">
-                    <i class="fas fa-concierge-bell"></i> Serve
-                  </button>
-                  <button (click)="onDelete(product)" *ngIf="!product.isServed" class="btn btn-sm btn-outline-danger px-3 ml-2">
-                    Remove <i class="fas fa-arrow-circle-right"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="d-flex justify-content-between align-items-center">
-                <strong>TOTAL</strong>
-                <strong>{{ total | currency }}</strong>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card-footer text-center text-muted rounded-0">
-        <small>TOTAL PRODUCTS IN CURRENT ORDER: {{ sumProduct }}</small>
+      <div class="col-md">
+        <input type="text" [(ngModel)]="keyword" class="form-control text-center shadow-sm" placeholder="Search Product">
       </div>
     </div>
   </div>
-  <div class="col">
-    <div *ngIf="order.isPaid" class="alert alert-info m-0 rounded-0" role="alert">
-      This order has been paid on <strong>{{ payment.createdAt | date }}</strong> for <strong>{{ payment.total | currency }}</strong> as <strong>{{ payment.paymentMethod?.name }}</strong>.
-    </div>
-    
-    <div *ngIf="!order.isPaid" class="card rounded-0">
-      <div *ngIf="!products.length" class="card-body rounded-0">
-        <div class="alert alert-info m-0 rounded-0" role="alert">
-          There are no any resources to show here.
+
+  <div *ngIf="!order.isPaid" class="row px-2">
+    <div class="col-md-12 col-lg-6 col-xl-4 pt-0 pr-2 pb-2 pl-2" *ngFor="let product of products | productFilter: keyword">
+      <div (click)="onSubmit(product)" class="bg-white rounded shadow-sm p-3">
+        <div class="row d-flex align-items-center">
+          <div class="col-sm-1">
+            <i class="text-primary far fa-save"></i>
+          </div>
+          <div class="col-sm-8">
+            <small class="text-uppercase font-weight-bold d-block">Product</small>
+            {{ product.productName }}
+          </div>
+          <div class="col-sm-3">
+            <small class="text-uppercase font-weight-bold d-block">Price</small>
+            {{ (product.price + (product.price * product.tax / 100)) | currency }}
+          </div>
         </div>
-      </div>
-      <div *ngIf="products.length" class="card-body rounded-0 p-0">
-        <table class="table table-hover m-0">
-          <thead>
-            <tr>
-              <th class="border-0" scope="col">PRODUCTS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="cursor: pointer" (click)="onSubmit(product)" *ngFor="let product of products; let i = index">
-              <td class="d-flex justify-content-between align-items-center">
-                <div>
-                  <i class="text-info fas fa-arrow-circle-left mr-2"></i>
-                  {{ i+1 }}.
-                  {{ product.productName }} x {{ product.quantity }}
-                </div>
-                <div>
-                  {{ (product.price + (product.price * product.tax / 100)) | currency }}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="card-footer text-center text-muted rounded-0">
-        <small>TOTAL PRODUCTS: {{ products.length }}</small>
       </div>
     </div>
   </div>

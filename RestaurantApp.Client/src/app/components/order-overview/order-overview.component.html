@@ -1,0 +1,47 @@
+<div class="card border-0">
+
+  <div class="text-center card-header border-0 bg-light">
+    <h4 style="font-weight: 900">{{ order.table?.tableName | uppercase }}</h4>
+    <small class="text-uppercase font-weight-bold">{{ order.orderName | uppercase }}</small>
+  </div>
+
+  <div *ngIf="!products.length" class="card-body bg-light">
+    <div class="alert alert-primary text-center m-0" role="alert">
+      <i style="font-size: 200%" class="fas fa-info-circle d-block mb-1"></i>
+      There are no any products to show here. You can add product(s) on the order page.
+    </div>
+  </div>
+
+  <div *ngIf="products.length" class="card-body bg-light" style="overflow-y: auto; height: 250px">
+    <div class="list-group">
+      <div class="list-group-item mb-1 p-3 border-0 rounded shadow-sm"
+        *ngFor="let product of products; let i = index">
+        <div class="row d-flex align-items-center">
+          <div class="col-sm-8">
+            <small class="text-uppercase font-weight-bold">Product</small> <br> 
+            {{ product.product.productName }} x {{ product.quantity }}
+            ({{ (product.product.price + (product.product.price * product.product.tax / 100)) * product.quantity | currency }})
+            <div class=" d-block d-sm-none pb-3"></div>
+          </div>
+          <div class="col-sm-4">
+            <small class="text-uppercase font-weight-bold">Status</small> <br> 
+            <app-order-product-status [product]="product"></app-order-product-status>
+          </div>
+        </div>
+      </div>
+      <div class="list-group-item list-group-item-action p-0 border-0 rounded-0 text-right bg-transparent ">
+        <div class="d-inline-block bg-primary text-white px-3 py-1 mt-2 rounded">
+          <small class="text-uppercase font-weight-bold d-block">Total</small>
+          <h4 style="font-weight: 900" class="m-0">{{ order.total | currency }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-footer d-flex justify-content-between align-items-center text-muted bg-light border-0">
+    <small> TOTAL PRODUCT(S): {{ sumProduct }}</small>
+    <button [routerLink]="['/order/' + order.id + '/view']" class="btn btn-sm btn-outline-primary rounded-circle" matDialogClose>
+      <i class="fas fa-link"></i>
+    </button>
+  </div>
+</div>

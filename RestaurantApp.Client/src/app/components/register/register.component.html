@@ -1,61 +1,55 @@
-<h4>{{ title | uppercase }}</h4>
-
-<nav aria-label="breadcrumb" class="mb-5">
-  <ol class="breadcrumb bg-white p-0">
-    <li class="breadcrumb-item"><a class="text-info" routerLink="/">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
-  </ol>
-</nav>
-
-<form [formGroup]="form" autocomplete="off">
-  <div class="form-group row">
-    <div class="col">
-      <label>First Name</label>
-      <input formControlName="firstName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.firstName.errors }"/>
-      <div *ngIf="submitted && field.firstName.errors" class="invalid-feedback">
-        <div *ngIf="field.firstName.errors.required">The firstname field is required.</div>
-        <div *ngIf="field.firstName.errors.maxlength">The firstname field must be 50 characters at most.</div>
+<div class="d-flex align-items-center" style="height: 100vh">
+  <div class="w-25 mx-auto bg-white shadow p-5 rounded">
+    <div class="text-center">
+      <img class="w-75 mb-3" src="https://discordapp.com/assets/e4923594e694a21542a489471ecffa50.svg">
+    </div>    
+    <form [formGroup]="form" autocomplete="off" *ngIf="!users.length">
+      <div class="form-group">
+        <input placeholder="First Name" formControlName="firstName" class="form-control form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && field.firstName.errors }"/>
+        <div *ngIf="submitted && field.firstName.errors" class="invalid-feedback">
+          <div *ngIf="field.firstName.errors.required">The firstname field is required.</div>
+          <div *ngIf="field.firstName.errors.maxlength">The firstname field must be 50 characters at most.</div>
+        </div>
       </div>
-    </div>
-    <div class="col">
-      <label>Last Name</label>
-      <input formControlName="lastName" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.lastName.errors }"/>
-      <div *ngIf="submitted && field.lastName.errors" class="invalid-feedback">
-        <div *ngIf="field.lastName.errors.required">The lastname field is required.</div>
-        <div *ngIf="field.lastName.errors.maxlength">The lastname field must be 25 characters at most.</div>
+      <div class="form-group">
+        <input placeholder="Last Name" formControlName="lastName" class="form-control form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && field.lastName.errors }"/>
+        <div *ngIf="submitted && field.lastName.errors" class="invalid-feedback">
+          <div *ngIf="field.lastName.errors.required">The lastname field is required.</div>
+          <div *ngIf="field.lastName.errors.maxlength">The lastname field must be 25 characters at most.</div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="form-group">
-    <label>E-Mail</label>
-    <input formControlName="email" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.email.errors }"/>
-    <div *ngIf="submitted && field.email.errors" class="invalid-feedback">
-      <div *ngIf="field.email.errors.required">The e-mail field is required.</div>
-      <div *ngIf="field.email.errors.email">The e-mail field must be e-mail format.</div>
-    </div>
-  </div>
-  <div class="form-group row">
-    <div class="col">
-      <label>Password</label>
-      <input formControlName="password" type="password" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.password.errors }"/>
-      <div *ngIf="submitted && field.password.errors" class="invalid-feedback">
-        <div *ngIf="field.password.errors.required">The password field is required.</div>
+      <div class="form-group">
+        <input placeholder="E-Mail" formControlName="email" class="form-control form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && field.email.errors }"/>
+        <div *ngIf="submitted && field.email.errors" class="invalid-feedback">
+          <div *ngIf="field.email.errors.required">The e-mail field is required.</div>
+          <div *ngIf="field.email.errors.email">The e-mail field must be e-mail format.</div>
+        </div>
       </div>
-    </div>
-    <div class="col">
-      <label>Confirm Password</label>
-      <input type="password" formControlName="confirmPassword" class="form-control form-control-sm" [ngClass]="{ 'is-invalid': submitted && field.confirmPassword.errors }" />
-      <div *ngIf="submitted && field.confirmPassword.errors" class="invalid-feedback">
+      <div class="form-group">
+        <input placeholder="Password" formControlName="password" type="password" class="form-control form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && field.password.errors }"/>
+        <div *ngIf="submitted && field.password.errors" class="invalid-feedback">
+          <div *ngIf="field.password.errors.required">The password field is required.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input placeholder="Confirm Password" type="password" formControlName="confirmPassword" class="form-control form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && field.confirmPassword.errors }" />
+        <div *ngIf="submitted && field.confirmPassword.errors" class="invalid-feedback">
           <div *ngIf="field.confirmPassword.errors.required">The confirm password field is required.</div>
-          <div *ngIf="field.confirmPassword.errors.mustMatch">The password fields must match.</div>
+          <div *ngIf="field.confirmPassword.errors.mustMatch">Both password fields must match.</div>
+        </div>
       </div>
+      <div class="text-center">
+        <button class="btn btn-sm btn-block btn-primary rounded-pill py-2 px-5" (click)="onSubmit(form)">{{ title }}</button>
+        <small class="d-block mt-3"><a routerLink="/login">Do you have an account? Login instantly.</a></small>
+      </div>
+    </form>
+
+
+    <div *ngIf="users.length" class="text-center">
+      <div class="alert alert-primary" role="alert">
+        The registration of the application has been closed.
+      </div>
+      <small class="d-block mt-3"><a routerLink="/login">Do you have an account? Login instantly.</a></small>
     </div>
   </div>
-  <div class="d-flex align-items-center justify-content-between">
-    <small><a routerLink="/login" class="text-info text-uppercase">Do you have aldreay an account? Login instantly.</a></small>
-    <div>
-      <button class="btn btn-sm btn-secondary px-5" (click)="reset(form)">Reset</button>
-      <button class="btn btn-sm btn-info ml-2 px-5" (click)="onSubmit(form)">{{ title }}</button>
-    </div>
-  </div>
-</form>
+</div>

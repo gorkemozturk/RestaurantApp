@@ -1,0 +1,174 @@
+<div class="card border-0">
+
+  <div class="text-center card-header border-0 bg-light">
+    <img style="width: 30%" src="https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/coffee_zorro_avatar_cup-512.png">
+    <h5 style="font-weight: 900">{{ user.firstName + ' ' + user.lastName }}</h5>
+  </div>
+
+  <div class="card-body bg-light" style="overflow-y: auto; height: 250px">
+    <div *ngIf="!expanded && !resetExpanded" class="list-group">
+      <div class="list-group-item border-0 mb-1 rounded shadow-sm">
+        <small class="font-weight-bold text-uppercase d-block">E-Mail</small>
+        {{ user.email }}
+      </div>
+      <div class="list-group-item border-0 mb-1 rounded shadow-sm">
+        <small class="font-weight-bold text-uppercase d-block">Phone Number</small>
+        {{ user.phoneNumber ? user.phoneNumber : 'Unknow' }}
+      </div>
+      <div class="list-group-item border-0 mb-1 rounded shadow-sm">
+        <small class="font-weight-bold text-uppercase d-block">Salary</small>
+        <div *ngIf="user.salary">
+          {{ user.salary | currency }} |
+          {{ user.salary * 7 | currency }} |
+          {{ user.salary * 30 | currency }}
+        </div>
+        <div *ngIf="!user.salary">Unknown</div>
+      </div>
+      <div class="list-group-item border-0 mb-1 rounded shadow-sm">
+        <small class="font-weight-bold text-uppercase d-block">Location</small>
+        {{ user.province ? user.province : 'Unknow' }}, {{ user.city ? user.city : 'Unknow' }}
+      </div>
+      <div class="list-group-item border-0 rounded shadow-sm">
+        <small class="font-weight-bold text-uppercase d-block">Address</small>
+        {{ user.address ? user.address : 'Unknow' }}
+      </div>
+    </div>
+
+    <form *ngIf="expanded" [formGroup]="form" autocomplete="off">
+      <div class="form-group row no-gutters mb-1">
+        <div class="col pr-1">
+          <input placeholder="First Name" formControlName="firstName" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.firstName.errors }"/>
+          <div *ngIf="submitted && field.firstName.errors" class="invalid-feedback">
+            <div *ngIf="field.firstName.errors.required">The first name field is required.</div>
+            <div *ngIf="field.firstName.errors.maxlength">The first name field must be 50 characters at most.</div>
+          </div>
+        </div>
+        <div class="col pl-1">
+          <input placeholder="Last Name" formControlName="lastName" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.lastName.errors }"/>
+          <div *ngIf="submitted && field.lastName.errors" class="invalid-feedback">
+            <div *ngIf="field.lastName.errors.required">The last name field is required.</div>
+            <div *ngIf="field.lastName.errors.maxlength">The last name field must be 25 characters at most.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group mb-1 row">
+        <div class="col pr-1">
+          <input placeholder="Salary" formControlName="salary" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.salary.errors }"/>
+          <div *ngIf="submitted && field.salary.errors" class="invalid-feedback">
+            <div *ngIf="field.salary.errors.pattern">The salary field must be numeric and 9 characters at most.</div>
+          </div>
+        </div>
+        <div class="col pl-1">
+          <input placeholder="Phone Number" formControlName="phoneNumber" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.phoneNumber.errors }"/>
+          <div *ngIf="submitted && field.phoneNumber.errors" class="invalid-feedback">
+            <div *ngIf="field.phoneNumber.errors.maxlength">The phone number field must be 25 characters at most.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row mb-1">
+        <div class="col pr-1">
+          <input placeholder="City" formControlName="city" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.city.errors }"/>
+          <div *ngIf="submitted && field.city.errors" class="invalid-feedback">
+            <div *ngIf="field.city.errors.maxlength">The city field must be 25 characters at most.</div>
+          </div>
+        </div>
+        <div class="col pl-1">
+          <input placeholder="Province" formControlName="province" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.province.errors }"/>
+          <div *ngIf="submitted && field.province.errors" class="invalid-feedback">
+            <div *ngIf="field.province.errors.maxlength">The province field must be 25 characters at most.</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <input placeholder="Address" formControlName="address" class="form-control rounded-pill" [ngClass]="{ 'is-invalid': submitted && field.address.errors }"/>
+        <div *ngIf="submitted && field.address.errors" class="invalid-feedback">
+          <div *ngIf="field.address.errors.maxlength">The province field must be 150 characters at most.</div>
+        </div>
+      </div>
+    </form>
+
+    <form *ngIf="resetExpanded" [formGroup]="resetForm" autocomplete="off">
+      <div class="form-group mb-1">
+        <input type="password" placeholder="Current Password" formControlName="currentPassword" class="form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && passwordField.currentPassword.errors }"/>
+        <div *ngIf="submitted && passwordField.currentPassword.errors" class="invalid-feedback">
+          <div *ngIf="passwordField.currentPassword.errors.required">The current password field is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group mb-1">
+        <input type="password" placeholder="New Password" formControlName="newPassword" class="form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && passwordField.newPassword.errors }"/>
+        <div *ngIf="submitted && passwordField.newPassword.errors" class="invalid-feedback">
+          <div *ngIf="passwordField.newPassword.errors.required">The new password field is required.</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input type="password" placeholder="Confirm Password" formControlName="confirmPassword" class="form-control rounded-pill text-center" [ngClass]="{ 'is-invalid': submitted && passwordField.confirmPassword.errors }"/>
+        <div *ngIf="submitted && passwordField.confirmPassword.errors" class="invalid-feedback">
+          <div *ngIf="passwordField.confirmPassword.errors.required">The confirm password field is required.</div>
+          <div *ngIf="passwordField.confirmPassword.errors.mustMatch">Both password fields must match.</div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-footer bg-light border-0 text-right d-none d-lg-block">
+    <div *ngIf="resetExpanded">
+      <button class="btn btn-sm btn-primary rounded-pill px-5 py-2 mr-1" (click)="onSubmitPassword(resetForm)">Update</button>
+      <button class="btn btn-sm btn-secondary rounded-pill px-5 py-2" (click)="cancel()">Cancel</button>
+    </div>
+
+    <div *ngIf="expanded">
+      <button class="btn btn-sm btn-primary rounded-pill px-5 py-2 mr-1" (click)="onSubmit(form)">
+        Update
+      </button>
+      <button class="btn btn-sm btn-secondary rounded-pill px-5 py-2" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+
+    <div class="text-right">
+      <button (click)="openResetForm()" 
+        *ngIf="!expanded && !resetExpanded && authService.currentUser.email === user.email" 
+        class="btn btn-sm btn-primary rounded-pill px-5 py-2 mr-1">
+        Reset Password
+      </button>
+      <button (click)="openForm()" 
+        *ngIf="!expanded && !resetExpanded && authService.currentUser.typ === 'Officer'" 
+        class="btn btn-sm btn-primary rounded-pill px-5 py-2">
+        Edit
+      </button>
+    </div>
+  </div>
+
+  <div class="card-footer bg-light border-0 text-right d-block d-lg-none">
+    <button (click)="openResetForm()" 
+      *ngIf="!expanded && !resetExpanded && authService.currentUser.email === user.email" 
+      class="btn btn-sm btn-outline-primary rounded-circle mr-1">
+      <i class="fas fa-key"></i>
+    </button>
+    <button (click)="openForm()" 
+      *ngIf="!expanded && !resetExpanded && authService.currentUser.typ === 'Officer'" 
+      class="btn btn-sm btn-outline-primary rounded-circle">
+      <i class="fas fa-sync-alt"></i>
+    </button>
+
+    <div *ngIf="expanded">
+      <button class="btn btn-primary rounded-circle mr-1" (click)="onSubmit(form)">
+        <i class="far fa-save"></i>
+      </button>
+      <button class="btn btn-secondary rounded-circle" (click)="cancel()">
+        <i class="far fa-trash-alt"></i>
+      </button>
+    </div>
+
+    <div *ngIf="resetExpanded">
+      <button class="btn btn-primary rounded-circle mr-1" (click)="onSubmitPassword(resetForm)">
+        <i class="far fa-save"></i>
+      </button>
+      <button class="btn btn-secondary rounded-circle" (click)="cancel()">
+        <i class="far fa-trash-alt"></i>
+      </button>
+    </div>
+  </div>
+</div>

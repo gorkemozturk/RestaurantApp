@@ -1,12 +1,7 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 *, body, html {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
-}
-
-body {
-    background: #F8F8F8;
+    font-family: 'Roboto', sans-serif;
 }
 
 small {
@@ -18,14 +13,9 @@ small {
     font-size: 90%;
 }
 
-.card {
-    border-width: medium;
-}
-
 .btn {
     text-transform: uppercase;
-    font-size: 90%;
-    font-weight: bold;
+    font-weight: 900;
 }
 
 .form-group label {
@@ -42,6 +32,7 @@ small {
     border-radius: 0;
     box-shadow: none;
     font-size: 14px;
+    background: transparent;
 }
 
 .pagination {

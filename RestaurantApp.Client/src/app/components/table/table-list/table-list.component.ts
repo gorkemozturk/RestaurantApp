@@ -3,6 +3,8 @@ import { Table } from 'src/app/_models/table';
 import { TableService } from 'src/app/_services/table.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/_services/auth.service';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { OrderOverviewComponent } from '../../order-overview/order-overview.component';
 
 @Component({
   selector: 'app-table-list',
@@ -14,10 +16,10 @@ export class TableListComponent implements OnInit {
   usage: boolean = false;
 
   page = 1;
-  pageSize = 5;
+  pageSize = 20;
   collectionSize = this.tables.length;
 
-  constructor(private service: TableService, private toastr: ToastrService, private authService: AuthService) { }
+  constructor(private service: TableService, private toastr: ToastrService, private authService: AuthService, private dialog: MatDialog) { }
 
   ngOnInit() {
     this.service.getTables().subscribe(res => this.tables = res);
@@ -51,6 +53,25 @@ export class TableListComponent implements OnInit {
         this.toastr.error('An error has been occurred during the process.', 'Error');
       }
     );
+  }
+
+  setClass(table: Table) {
+    let cl;
+    if (!table.isAvailable) { cl = 'bg-primary text-white'; } 
+    else { cl = 'bg-white'; }
+
+    return cl;
+  }
+  
+  openOrderOverview(id: number): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = false;
+    dialogConfig.panelClass = 'customized-dialog';
+    dialogConfig.data = { id };
+
+    this.dialog.open(OrderOverviewComponent, dialogConfig);
   }
 
 }

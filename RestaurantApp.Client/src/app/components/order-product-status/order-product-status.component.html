@@ -1,14 +1,14 @@
-<span class="ml-2" *ngIf="!product.isDone && !product.isServed">
-  <i class="text-warning fas fa-exclamation-circle mr-1"></i>
-  <small class="text-warning font-weight-bold">PENDING</small>
+<span *ngIf="!product.isDone && !product.isServed">
+  <i class="text-warning fas fa-circle mr-1"></i>
+  Pending
 </span>
 
-<span class="ml-2" *ngIf="product.isDone && !product.isServed">
-  <i class="text-success fas fa-check mr-1"></i>
-  <small class="text-success font-weight-bold">READY</small>
+<span *ngIf="product.isDone && !product.isServed">
+  <i class="text-success fas fa-circle mr-1"></i>
+  Ready
 </span>
 
-<span class="ml-2" *ngIf="product.isDone && product.isServed">
-  <i class="text-info fas fa-check-double mr-1"></i>
-  <small class="text-info font-weight-bold">SERVED</small>
+<span *ngIf="product.isDone && product.isServed">
+  <i class="text-primary fas fa-circle mr-1"></i>
+  Served
 </span>
